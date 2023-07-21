@@ -14,12 +14,36 @@ jobs:
       run: |
         echo ${{ github.actor }}
         
-    - name: Get User Details
+    - name: Get User Details node
+      id: get-user-node
       run: |
-        response=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-        "https://api.github.com/users/${{ github.actor }}")
-        firstName=$(echo "$response" | jq -r '.name // empty' | cut -d " " -f 1)
-        lastName=$(echo "$response" | jq -r '.name // empty' | cut -d " " -f 2)
-        echo "First Name: $firstName"
-        echo "Last Name: $lastName"
+        npm install axios @actions/core
+        node - <<EOF
+          const axios = require('axios');   
+          const core = require('@actions/core');
+          
+          async function fetchUserInfo() {
+            try {
+              const endpoint = 'https://api.github.com/users/${{ github.triggering_actor }}';
+              console.log('endpoint ' + endpoint)
+              const response = await axios.get(endpoint, {
+                headers: {
+                  Authorization: "Bearer " + "${{ secrets.GITHUB_TOKEN }}"
+                },
+              });
+              console.log('This is the name')
+              console.log('${{ github.triggering_actor }}')
+              
+              console.log(response.data.name || '${{ github.triggering_actor }}')
+              const name = response.data.name || '${{ github.triggering_actor }}'; // Get the name from the response, or use an empty string if it's undefined or null
+              console.log('set name', name)
+              
+              core.setOutput('actor_name', name);
+            } catch (error) {
+              console.error('Error fetching user info:', error.message);
+            }
+          }
+
+          fetchUserInfo();          
+        EOF
         
