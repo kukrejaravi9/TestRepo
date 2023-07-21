@@ -31,10 +31,7 @@ jobs:
                   Authorization: "Bearer " + "${{ secrets.GITHUB_TOKEN }}"
                 },
               });
-              console.log('This is the name')
-              console.log('${{ github.triggering_actor }}')
-              
-              console.log(response.data.name || '${{ github.triggering_actor }}')
+
               const name = response.data.name || '${{ github.triggering_actor }}'; // Get the name from the response, or use an empty string if it's undefined or null
               console.log('set name', name)
               
