@@ -17,4 +17,4 @@ jobs:
         run: |
           echo "Pull Request Branch: ${{ github.head_ref }}"
         
-    if: startsWith(github.ref, 'release-')   
+    if: startsWith(github.head_ref, 'release-')   
