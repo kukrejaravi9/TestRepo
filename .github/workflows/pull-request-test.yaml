@@ -3,8 +3,6 @@ on:
   pull_request:
     types:
       - opened
-    branches:
-      - 'releases-/**'      
       
 jobs:
   build:
@@ -14,4 +12,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+     
+      - name: print
+        run: |
+          echo "Pull Request Branch: ${{ github.head_ref }}"
         
+    #if: startsWith(github.ref, 'refs/heads/release-')   
