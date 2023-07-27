@@ -15,6 +15,7 @@ jobs:
      
       - name: print
         run: |
+          echo "Pull Request Branch: ${{ github.base_ref }}"
           echo "Pull Request Branch: ${{ github.head_ref }}"
         
     if: startsWith(github.base_ref, 'release-')   || startsWith(github.base_ref, 'hotfix-') 
