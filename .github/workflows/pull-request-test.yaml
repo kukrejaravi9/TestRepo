@@ -15,7 +15,7 @@ jobs:
      
       - name: print
         run: |
-          echo "Pull Request Branch: ${{ github.ref }}"
+          echo "Pull Request Branch: ${{ github.base_ref }}"
           echo "Pull Request Branch: ${{ github.head_ref }}"
         
     #if: startsWith(github.ref, 'refs/heads/release-')   
