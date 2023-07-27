@@ -1,0 +1,14 @@
+name: Pull Request Workflow
+on:
+  pull_request:
+    types:
+      - opened
+
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
