@@ -18,4 +18,4 @@ jobs:
           echo "Pull Request Branch: ${{ github.base_ref }}"
           echo "Pull Request Branch: ${{ github.head_ref }}"
         
-    if: startsWith(github.head_ref, 'release-')   
+    if: startsWith(github.base_ref, 'release-')   
