@@ -3,6 +3,8 @@ on:
   pull_request:
     types:
       - opened
+    branches:
+      - 'releases-**'      
       
 jobs:
   build:
@@ -13,4 +15,3 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
         
-    if: startsWith(github.ref, 'refs/heads/release-')        
