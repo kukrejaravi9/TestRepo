@@ -20,10 +20,10 @@ jobs:
           
       - name: Extract version name from branch
         run: |
-          if [ ${{ contains(github.base_ref, 'refs/heads/release-') }} = true ]; then
-            SEPARATOR='refs/heads/release-' 
-          elif [ ${{ contains(github.base_ref, 'refs/heads/hotfix-') }} = true ]; then
-            SEPARATOR='refs/heads/hotfix-' 
+          if [ ${{ contains(github.base_ref, 'release-') }} = true ]; then
+            SEPARATOR='release-' 
+          elif [ ${{ contains(github.base_ref, 'hotfix-') }} = true ]; then
+            SEPARATOR='hotfix-' 
           fi        
           echo "VERSION_NAME="${GITHUB_BASE_REF#"$SEPARATOR"}"" >> "$GITHUB_ENV"       
       
