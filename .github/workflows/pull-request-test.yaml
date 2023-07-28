@@ -17,5 +17,18 @@ jobs:
         run: |
           echo "Pull Request Branch: ${{ github.base_ref }}"
           echo "Pull Request Branch: ${{ github.head_ref }}"
+          
+      - name: Extract version name from branch
+        run: |
+          if [ ${{ contains(github.base_ref, 'refs/heads/release-') }} = true ]; then
+            SEPARATOR='refs/heads/release-' 
+          elif [ ${{ contains(github.base_ref, 'refs/heads/hotfix-') }} = true ]; then
+            SEPARATOR='refs/heads/hotfix-' 
+          fi        
+          echo "VERSION_NAME="${GITHUB_BASE_REF#"$SEPARATOR"}"" >> "$GITHUB_ENV"       
+      
+      - name: Print the version
+        run: |
+          echo ${{ env.VERSION_NAME }}
         
     if: startsWith(github.base_ref, 'release-') || startsWith(github.base_ref, 'hotfix-')   
