@@ -24,4 +24,3 @@ jobs:
         node - <<EOF            
             core.setOutput('version_code', 11);
         EOF
-        
