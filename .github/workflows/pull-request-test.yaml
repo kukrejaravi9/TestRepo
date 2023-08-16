@@ -5,7 +5,8 @@ on:
       [opened, closed]
       
 jobs:
-  get-next-android-versioncode:    
+  get-next-android-versioncode:
+    if: startsWith(github.base_ref, 'release-') || startsWith(github.base_ref, 'hotfix-')
     uses: ./.github/workflows/reusable-test.yml
 
   build:
@@ -27,11 +28,6 @@ jobs:
           echo "Pull Request Branch: ${{ github.head_ref }}"
           echo ${{ needs.get-next-android-versioncode.outputs.version_code }}
           
-      - name: print
-        run: |
-          echo "Pull Request Branch: ${{ github.base_ref }}"
-          echo "Pull Request Branch: ${{ github.head_ref }}"
-          
       - name: Extract version name from branch
         run: |
           if [ ${{ contains(github.base_ref, 'release-') }} = true ]; then
@@ -43,6 +39,4 @@ jobs:
       
       - name: Print the version
         run: |
-          echo ${{ env.VERSION_NAME }}        
-        
-        
+          echo ${{ env.VERSION_NAME }}            
