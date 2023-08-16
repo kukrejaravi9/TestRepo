@@ -11,6 +11,8 @@ jobs:
   build:
     name: Build and Test
     runs-on: ubuntu-latest
+    if: startsWith(github.base_ref, 'release-') || startsWith(github.base_ref, 'hotfix-')
+    
     needs: get-next-android-versioncode
     permissions:
       contents: write
@@ -42,6 +44,5 @@ jobs:
       - name: Print the version
         run: |
           echo ${{ env.VERSION_NAME }}        
-          echo ${{ env.VERSION_NAME }}
         
-    if: startsWith(github.base_ref, 'release-') || startsWith(github.base_ref, 'hotfix-')   
+        
