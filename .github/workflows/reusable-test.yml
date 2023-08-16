@@ -19,8 +19,9 @@ jobs:
     - name: Get next android versioncode
       id: step-get-version-code
       run: |
-        npm install googleapis @actions/core
+        npm install @actions/core
         
-        node - <<EOF            
+        node - <<EOF
+            const core = require('@actions/core');
             core.setOutput('version_code', 11);
         EOF
