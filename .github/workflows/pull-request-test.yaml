@@ -5,10 +5,16 @@ on:
       [opened, closed]
       
 jobs:
+  get-next-android-versioncode:    
+    uses: ./.github/workflows/reusable-test.yml
+
   build:
     name: Build and Test
     runs-on: ubuntu-latest
-
+    needs: get-next-android-versioncode
+    permissions:
+      contents: write
+      
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -17,11 +23,7 @@ jobs:
         run: |
           echo "Pull Request Branch: ${{ github.base_ref }}"
           echo "Pull Request Branch: ${{ github.head_ref }}"
-          
-      - name: print
-        run: |
-          echo "Pull Request Branch: ${{ github.base_ref }}"
-          echo "Pull Request Branch: ${{ github.head_ref }}"
+          echo ${{ needs.get-next-android-versioncode.outputs.version_code }}
           
       - name: Extract version name from branch
         run: |
@@ -34,6 +36,6 @@ jobs:
       
       - name: Print the version
         run: |
-          echo ${{ env.VERSION_NAME }}        
+          echo ${{ env.VERSION_NAME }}
         
-    if: startsWith(github.base_ref, 'release-')   || startsWith(github.base_ref, 'hotfix-') 
+    if: startsWith(github.base_ref, 'release-') || startsWith(github.base_ref, 'hotfix-')   
