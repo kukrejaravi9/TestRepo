@@ -5,6 +5,9 @@ on:
       [opened, closed]
       
 jobs:
+  get-next-android-versioncode:    
+    uses: ./.github/workflows/reusable-test.yml
+
   build:
     name: Build and Test
     runs-on: ubuntu-latest
