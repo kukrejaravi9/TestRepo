@@ -7,6 +7,6 @@ jobs:
   Slack_Update_Status:
     runs-on: ubuntu-latest
     steps:  
-      - name: slack update
+      - name: slack result
         run: 
-          echo slack update
+          echo slack result
