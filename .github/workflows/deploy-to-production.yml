@@ -4,11 +4,7 @@ on:
 
 jobs:
   slack_update_pending_apr_prod_one:    
-    uses: kukrejaravi9/TestRepo/.github/workflows/slack_post.yml@main
-    with:
-      CHANNEL_ID: "mngdsols-devops"
-      WORKFLOW_RUN_STATUS: ${{ format('{0}{1}', 'Pending Approval', ' :lock:') }}
-      WORKFLOW_NAME: 'Build and Deploy - Prod1'      
+    uses: kukrejaravi9/TestRepo/.github/workflows/slack_post.yml@main   
     secrets: inherit   
     
   deploy-to-prod-one:      
