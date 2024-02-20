@@ -1,0 +1,37 @@
+name: Deploy to server
+on: 
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string  
+
+    outputs:
+      reviewed:
+        description: "Output to check if the job was approved"
+        value: ${{ jobs.wait_for_approval.outputs.reviewed }}        
+jobs: 
+  wait_for_approval:    
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    outputs: 
+      reviewed: ${{ steps.set-output.outputs.reviewed }}    
+    steps:
+    - name: Deployment approved
+      id: set-output
+      run: |
+        echo 'Deployment approved'
+        echo "reviewed=true" >> $GITHUB_OUTPUT
+        
+  slack_update_in_progress:    
+    needs: [wait_for_approval]
+    uses: kukrejaravi9/TestRepo/.github/workflows/slack_update.yml@main
+    secrets: inherit
+    
+  deploy-to-server:    
+    environment: ${{ inputs.environment }}    
+    runs-on: ubuntu-latest 
+    steps:     
+    - name: Checkout code
+      run: |
+        echo deploy to server
