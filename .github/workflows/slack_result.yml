@@ -1,0 +1,12 @@
+name: Generate Workflow Result
+
+on:
+  workflow_call
+
+jobs:
+  Slack_Update_Status:
+    runs-on: ubuntu-latest
+    steps:  
+      - name: slack update
+        run: 
+          echo slack update
