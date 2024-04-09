@@ -8,6 +8,8 @@ jobs:
     steps:
     - name: Set workflow name for slack message
       id: set-slack-workflow-name
+      env: 
+        VAR_ONE_SEC: ${{ secrets.VAR_ONE }}
       run: |
-        echo ${{ secrets.VAR_ONE }}                       
+        echo $VAR_ONE_SEC                   
                        
