@@ -3,77 +3,11 @@ on:
   workflow_dispatch
 
 jobs:
-  slack_update_pending_apr_prod_one:    
-    uses: kukrejaravi9/TestRepo/.github/workflows/slack_post.yml@main   
-    secrets: inherit   
-    
-  deploy-to-prod-one:      
-    uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
-    with:
-      environment: 'Production'    
-    permissions:
-      contents: write   
-      
-  slack_update_pending_apr_prod_two:    
-    needs: [deploy-to-prod-one,slack_update_pending_apr_prod_one]
-    uses: kukrejaravi9/TestRepo/.github/workflows/slack_update.yml@main    
-    secrets: inherit
-    
-  deploy-to-prod-two:
-    needs: [deploy-to-prod-one]
-    uses:  kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
-    with:
-      environment: 'Production'
-    permissions:
-      contents: write        
-
-
   set_success_fail_workflow_name: 
-    needs: [slack_update_pending_apr_prod_one, deploy-to-prod-one,slack_update_pending_apr_prod_two, deploy-to-prod-two]
-    if: ${{ always() }}
-    runs-on: ubuntu-latest
-    outputs: 
-      slack_workflow_name: ${{ steps.set-slack-workflow-name.outputs.slack_workflow_name }}      
+    runs-on: ubuntu-latest   
     steps:
     - name: Set workflow name for slack message
       id: set-slack-workflow-name
-      env:
-        prod_one_result: ${{ needs.deploy-to-prod-one.result }}
-        prod_two_result: ${{ needs.deploy-to-prod-two.result }}
-        prod_one_reviewed: ${{ needs.deploy-to-prod-one.outputs.reviewed }}
-        prod_two_reviewed: ${{ needs.deploy-to-prod-two.outputs.reviewed }}
       run: |
-        echo $prod_one_result
-        echo $prod_two_result
-        echo $prod_one_reviewed
-        echo $prod_two_reviewed
-        
-        if [[ $prod_one_result == 'cancelled' ]]; then            
-           echo "slack_workflow_name=Build and Deploy - Prod1" >> $GITHUB_OUTPUT   
-        elif [[ $prod_two_result == 'cancelled' ]]; then            
-          echo "slack_workflow_name=Build and Deploy - Prod2" >> $GITHUB_OUTPUT                    
-        elif [[ $prod_one_result == 'failure' ]] && [[ $prod_one_reviewed == 'true' ]]; then              
-           echo "slack_workflow_name=Build and Deploy - Prod1" >> $GITHUB_OUTPUT                    
-        elif [[ $prod_one_result == 'failure' ]] && [[ $prod_one_reviewed != 'true' ]]; then                  
-           echo "slack_workflow_name=Build and Deploy - Prod1" >> $GITHUB_OUTPUT                                       
-        elif [[ $prod_one_result == 'success' ]] && [[ $prod_two_result == 'success' ]]; then                         
-           echo "slack_workflow_name=Build and Deploy - Prod2" >> $GITHUB_OUTPUT          
-        elif [[ $prod_one_result == 'success' ]]  && [[ $prod_two_result == 'failure' ]] && [[ $prod_two_reviewed == 'true' ]]; then                    
-           echo "slack_workflow_name=Build and Deploy - Prod2" >> $GITHUB_OUTPUT        
-        elif [[ $prod_one_result == 'success' ]]  && [[ $prod_two_result == 'failure' ]] && [[ $prod_two_reviewed != 'true' ]]; then                       
-           echo "slack_workflow_name=Build and Deploy - Prod2" >> $GITHUB_OUTPUT           
-        else         
-          echo "slack_workflow_name=Build and Deploy - Production" >> $GITHUB_OUTPUT 
-        fi                               
+        echo $VAR_ONE                           
                        
-  slack_update_result_success_failure:    
-    needs: [slack_update_pending_apr_prod_one, deploy-to-prod-one,slack_update_pending_apr_prod_two, deploy-to-prod-two, set_success_fail_workflow_name]
-    if: ${{ always() && success('slack_update_pending_apr_prod_one') }}    
-    uses: kukrejaravi9/TestRepo/.github/workflows/slack_result.yml@main
-    secrets: inherit
-      
-  slack_update_result_cancelled:
-    if: ${{ cancelled() || ( failure('deploy-to-prod-one')  &&  needs.deploy-to-prod-one.outputs.reviewed != 'true') || ( failure('deploy-to-prod-two')  &&  needs.deploy-to-prod-two.outputs.reviewed != 'true') }}    
-    needs: [slack_update_pending_apr_prod_one, deploy-to-prod-one,slack_update_pending_apr_prod_two, deploy-to-prod-two, set_success_fail_workflow_name]
-    uses: kukrejaravi9/TestRepo/.github/workflows/slack_result.yml@main
-    secrets: inherit  
