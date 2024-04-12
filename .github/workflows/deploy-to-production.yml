@@ -9,27 +9,27 @@ jobs:
       - name: Step 1
         run: |
           echo "Doing something in Step 1..."
-          echo "SUCCESS_MESSAGES='Step 1 success'" >> $GITHUB_ENV
+          echo "SUCCESS_MESSAGES=Step 1 success" >> $GITHUB_ENV
         
       - name: Step 1
         run: |
           echo "Doing something in Step 2..."
-          echo "SUCCESS_MESSAGES='${{ env.SUCCESS_MESSAGES }}\nStep 2 success'" >> $GITHUB_ENV
+          echo "SUCCESS_MESSAGES=${{ env.SUCCESS_MESSAGES }}\nStep 2 success" >> $GITHUB_ENV
 
       - name: Step 3
         run: |
           echo "Doing something in Step 3..."
-          echo "SUCCESS_MESSAGES='${{ env.SUCCESS_MESSAGES }}\nStep 3 success'" >> $GITHUB_ENV
+          echo "SUCCESS_MESSAGES=${{ env.SUCCESS_MESSAGES }}\nStep 3 success" >> $GITHUB_ENV
 
       - name: Step 4
         run: |
           echo "Doing something in Step 4..."
-          echo "SUCCESS_MESSAGES='${{ env.SUCCESS_MESSAGES }}\nStep 4 success'" >> $GITHUB_ENV
+          echo "SUCCESS_MESSAGES=${{ env.SUCCESS_MESSAGES }}\nStep 4 success" >> $GITHUB_ENV
 
       - name: Step 5
         run: |
           echo "Doing something in Step 5..."
-          echo "SUCCESS_MESSAGES='${{ env.SUCCESS_MESSAGES }}\nStep 5 success'" >> $GITHUB_ENV
+          echo "SUCCESS_MESSAGES=${{ env.SUCCESS_MESSAGES }}\nStep 5 success" >> $GITHUB_ENV
 
       - name: echo the output
         run: |
