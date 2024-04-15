@@ -1,10 +1,19 @@
 name: Build and Deploy - Production
 on:
-  workflow_dispatch
+  workflow_dispatch:
+    inputs:
+      runner:
+        required: true
+        type: choice
+        description: Select the runner
+        default: '1'
+        options:
+          - '1'
+          - '2'      
 
 jobs:
   test2:
-    runs-on: ubuntu-latest
+    runs-on: ${{ format('{0}', (inputs.runner == '1' && 'ubuntu-latest') || 'mac-os-latest') }}
     steps:    
       - name: Step 1
         run: |
