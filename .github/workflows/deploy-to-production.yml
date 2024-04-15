@@ -13,7 +13,7 @@ on:
 
 jobs:
   test2:
-    runs-on: ${{ format('{0}', (inputs.runner == '1' && 'ubuntu-latest') || 'mac-os-latest') }}
+    runs-on: ${{ format('ubuntu-latest, {0}', (inputs.runner == '1' && 'X64') || 'X86') }}
     steps:    
       - name: Step 1
         run: |
