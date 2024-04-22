@@ -20,16 +20,18 @@ jobs:
       id: triggered-by
       if: always()
       run: |
-        #echo "TRIGGERED_BY=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/users/${{ github.triggering_actor }} | jq -r '.name')" >> "$GITHUB_OUTPUT"
+       
 
-        # Fetch user info using curl
-        TRIGGERED_BY=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/users/${{ github.triggering_actor }} | jq -r '.name')
-        echo $TRIGGERED_BY
-        # Check if name is empty
-        if [ "$TRIGGERED_BY" = "null" ]; then
-          echo here
-          TRIGGERED_BY=${{ github.triggering_actor }}
-        fi        
+       
+        #TRIGGERED_BY=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/users/${{ github.triggering_actor }} | jq -r '.name')
+
+        #if [ "$TRIGGERED_BY" = "null" ]; then
+          
+          #TRIGGERED_BY=${{ github.triggering_actor }}
+        #fi        
+
+        TRIGGERED_BY=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/users/${{ github.triggering_actor }} | jq -r '.name') [ "$TRIGGERED_BY" = "null" ] && TRIGGERED_BY=${{ github.triggering_actor }}
+
         echo "TRIGGERED_BY=$TRIGGERED_BY" >> "$GITHUB_OUTPUT"
       
         
