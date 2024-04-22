@@ -30,7 +30,7 @@ jobs:
           #TRIGGERED_BY=${{ github.triggering_actor }}
         #fi        
 
-        echo "TRIGGERED_BY=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/users/${{ github.triggering_actor }} | jq -r '.name') && [ "$TRIGGERED_BY" = "null" ] && TRIGGERED_BY=${{ github.triggering_actor }}" >> $GITHUB_OUTPUT
+        echo "TRIGGERED_BY=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/users/${{ github.triggering_actor }} | jq -r '.name') && [ "$TRIGGERED_BY" = "null" ] && TRIGGERED_BY=${{ github.triggering_actor }}" >> "$GITHUB_OUTPUT"
 
 
         #echo "TRIGGERED_BY=$TRIGGERED_BY" >> "$GITHUB_OUTPUT"
