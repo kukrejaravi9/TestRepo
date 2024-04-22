@@ -20,9 +20,7 @@ jobs:
       id: triggered-by
       if: always()
       run: |
-        TRIGGERED_BY=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/users/${{ github.triggering_actor }} | jq -r '.name')
-        echo $TRIGGERED_BY
-        echo "TRIGGERED_BY=$TRIGGERED_BY" >> GITHUB_OUTPUT
+        echo "TRIGGERED_BY=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/users/${{ github.triggering_actor }} | jq -r '.name')" >> "$GITHUB_OUTPUT"
     
     - name: print triggered by
       run: 
