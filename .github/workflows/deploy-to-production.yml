@@ -27,6 +27,7 @@ jobs:
         echo $TRIGGERED_BY
         # Check if name is empty
         if [ -z "$TRIGGERED_BY" ]; then
+          echo here
           TRIGGERED_BY=${{ github.triggering_actor }}
         fi        
         echo "TRIGGERED_BY=$TRIGGERED_BY" >> "$GITHUB_OUTPUT"
