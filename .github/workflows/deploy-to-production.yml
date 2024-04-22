@@ -26,7 +26,7 @@ jobs:
         TRIGGERED_BY=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/users/${{ github.triggering_actor }} | jq -r '.name')
         
         # Check if name is empty
-        if [ -z "$name" ]; then
+        if [ -z "$TRIGGERED_BY" ]; then
           TRIGGERED_BY=${{ github.triggering_actor }}
         fi        
         echo "TRIGGERED_BY=$TRIGGERED_BY" >> "$GITHUB_OUTPUT"
