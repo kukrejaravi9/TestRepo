@@ -8,7 +8,7 @@ on:
         type: string    
 jobs: 
   wait_for_approval:    
-    uses: kukrejaravi9/TestRepo/blob/main/.github/workflows/deploy-to-production.yml@main
+    uses: kukrejaravi9/TestRepo/.github/workflows/deploy-to-production.yml@main
     with: 
       some_input: ${{ inputs.some_input }}
   
