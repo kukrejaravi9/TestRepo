@@ -6,12 +6,14 @@ on:
       some_input:
         description: 'Some input description'
         required: true
+        type: string
 
   workflow_call:
     inputs:
       some_input:
         description: 'Some input description'
         required: true 
+        type: string
 jobs:
   test2:
     runs-on: ubuntu-latest
