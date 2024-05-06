@@ -11,23 +11,15 @@ on:
         required: true
         type: choice
         options: 
-          - 'Option 1'
+          - 'ubuntu-latest'
 
 env:
-  DEFAULT_SOURCE: 'TEST'
-  DEFAULT_DESTINATION: 'PROD'
+  DEFAULT_SOURCE: 'macos-latest'  
 
 jobs:
   test2:
-    runs-on: ubuntu-latest
-    steps:    
-        
-    - name: Get triggering user name
-      id: triggered-by      
-      run: |
-        #echo ${{ inputs.some_input }} || ${{ env.DEFAULT_SOURCE }}
-        #echo ${{ inputs.some_input }} || ${{ env.DEFAULT_DESTINATION }}
-
-        ${{ inputs.some_input || env.DEFAULT_SOURCE }}
+    uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
+    with: 
+      some_input: ${{ inputs.some_input || env.DEFAULT_SOURCE }}
 
        
