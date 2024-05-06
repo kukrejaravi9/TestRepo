@@ -1,5 +1,5 @@
 name: Build and Deploy - Production
-
+run-name: ${{ inputs.some_input || macos-latest }} to ${{ inputs.some_input || macos-latest }}
 on:
   schedule:
     - cron: '*/6 * * * *'
