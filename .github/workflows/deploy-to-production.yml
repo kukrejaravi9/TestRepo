@@ -25,7 +25,9 @@ jobs:
     - name: Get triggering user name
       id: triggered-by      
       run: |
-        echo ${{ inputs.some_input }} || ${{ env.DEFAULT_SOURCE }}
-        echo ${{ inputs.some_input }} || ${{ env.DEFAULT_DESTINATION }}
+        #echo ${{ inputs.some_input }} || ${{ env.DEFAULT_SOURCE }}
+        #echo ${{ inputs.some_input }} || ${{ env.DEFAULT_DESTINATION }}
+
+        ${{ inputs.some_input || env.DEFAULT_SOURCE }}
 
        
