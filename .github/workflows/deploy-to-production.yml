@@ -1,8 +1,8 @@
 name: Build and Deploy - Production
 run-name: ${{ inputs.some_input || 'macos-latest' }} to ${{ inputs.some_input || 'macos-latest' }}
 on:
-  schedule:
-    - cron: '*/6 * * * *'
+  #schedule:
+    #- cron: '*/6 * * * *'
   
   workflow_dispatch:
     inputs:
