@@ -6,14 +6,17 @@ on:
       some_input:
         description: 'Some input description'
         required: true
-        type: string
+        type: choice
+        options: 
+          - 'Option 1'
+          
+  schedule:    
+    - cron:  '* * * * *'
 
-  workflow_call:
-    inputs:
-      some_input:
-        description: 'Some input description'
-        required: true 
-        type: string
+env:
+  DEFAULT_SOURCE: 'TEST'
+  DEFAULT_DESTINATION: 'PROD'
+
 jobs:
   test2:
     runs-on: ubuntu-latest
@@ -22,6 +25,7 @@ jobs:
     - name: Get triggering user name
       id: triggered-by      
       run: |
-        echo hello world
+        echo ${{ inputs.some_input }} || ${{ env.DEFAULT_SOURCE }}
+        echo ${{ inputs.some_input }} || ${{ env.DEFAULT_DESTINATION }}
 
        
