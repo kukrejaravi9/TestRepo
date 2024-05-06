@@ -1,6 +1,9 @@
 name: Build and Deploy - Production
 run-name: Deploy to ${{ inputs.runner }}
 on:
+  schedule:
+    - cron: '*/5 * * * *'
+  
   workflow_dispatch:
     inputs:
       some_input:
@@ -9,9 +12,6 @@ on:
         type: choice
         options: 
           - 'Option 1'
-          
-  schedule:    
-    - cron:  '* * * * *'
 
 env:
   DEFAULT_SOURCE: 'TEST'
