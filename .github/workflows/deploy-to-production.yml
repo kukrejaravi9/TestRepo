@@ -20,6 +20,6 @@ jobs:
   test2:
     uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
     with: 
-      some_input: ${{ inputs.some_input || env.DEFAULT_SOURCE }}
+      some_input: ${{ github.event.inputs.some_input || env.DEFAULT_SOURCE }}
 
        
