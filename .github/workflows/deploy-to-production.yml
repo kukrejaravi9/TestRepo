@@ -1,8 +1,8 @@
 name: Build and Deploy - Production
-run-name: Deploy to ${{ inputs.runner }}
+
 on:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '*/6 * * * *'
   
   workflow_dispatch:
     inputs:
