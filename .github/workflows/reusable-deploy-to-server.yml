@@ -12,6 +12,6 @@ jobs:
     steps:
       - name: echo input
         run: 
-          ${{ inputs.some_input }}
+          echo ${{ inputs.some_input }}
     
   
