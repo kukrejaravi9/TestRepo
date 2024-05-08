@@ -16,9 +16,9 @@ on:
         required: true
         type: choice
         options: 
-          - 'dev'          
-          - 'test'
-          - 'prod'
+          - 'DEV'          
+          - 'PROD'
+          - 'TEST'
 
 jobs:
   test2: 
@@ -26,11 +26,21 @@ jobs:
       matrix:
         runner: [ubuntu-latest, macos-latest]
     runs-on: ["${{ matrix.runner }}"]
-    env:
-      myenvironment: ${{ if eq(inputs.myinput, 'dev') }}development${{ else if eq(inputs.myinput, 'test') }}stage${{ else }}production${{ endif }}    
+    
     steps:
-      - name: print hello world        
-        run: echo "myenvironment is $myenvironment"
+    - name: Set environment for script
+      run: |
+        if [[ "${{ inputs.environment }}" == "DEV" ]]; then 
+          echo "ENVIRONMENT=development" >> $GITHUB_ENV
+        elseif [[ "${{ inputs.environment }}" == "TEST" ]]; then
+          echo "ENVIRONMENT=stage" >> $GITHUB_ENV
+        else 
+          echo "ENVIRONMENT=production" >> $GITHUB_ENV
+        fi
+        
+    - name: Print the script      
+      run: |                     
+       echo "$ENVIRONMENT"
       
      
 
