@@ -1,8 +1,8 @@
 name: Build and Deploy - Production
 run-name: ${{ inputs.some_input || 'macos-latest' }} to ${{ inputs.some_input || 'macos-latest' }}
 on:
-  #schedule:
-    #- cron: '*/6 * * * *'
+  schedule:
+    - cron: '*/6 * * * *'
   
   workflow_dispatch:
     inputs:
@@ -18,9 +18,13 @@ env:
 
 jobs:
   test2: 
-    uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
-    with: 
-      some_input: ${{ inputs.some_input || 'macos-latest' }}
+    strategy: 
+      matrix:
+        runner: [ubuntu-latest, macos-latest]
+    runs-on: ["${{ matrix.runner }}"]
+    steps:
+      - name: print hello world
+        run: echo hello world
       
      
 
