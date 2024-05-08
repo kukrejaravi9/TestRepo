@@ -11,9 +11,14 @@ on:
         type: choice
         options: 
           - 'ubuntu-latest'
-
-env:
-  DEFAULT_SOURCE: 'macos-latest'  
+      some:
+        description: 'Some input'
+        required: true
+        type: choice
+        options: 
+          - 'dev'          
+          - 'test'
+          - 'prod'
 
 jobs:
   test2: 
@@ -21,11 +26,11 @@ jobs:
       matrix:
         runner: [ubuntu-latest, macos-latest]
     runs-on: ["${{ matrix.runner }}"]
+    env:
+      myenvironment: ${{ if eq(inputs.myinput, 'dev') }}development${{ else if eq(inputs.myinput, 'test') }}stage${{ else }}production${{ endif }}    
     steps:
-      - name: print hello world
-        run: |
-          var m = 10;
-          var m = require('axios')
+      - name: print hello world        
+        run: echo "myenvironment is $myenvironment"
       
      
 
