@@ -1,7 +1,7 @@
 name: Build and Deploy - Production
 on:
-  schedule:
-    - cron: '*/6 * * * *'
+  #schedule:
+    #- cron: '*/6 * * * *'
   
   workflow_dispatch:
     inputs:
