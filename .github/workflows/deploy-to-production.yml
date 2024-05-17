@@ -22,25 +22,12 @@ on:
 
 jobs:
   test2: 
-    strategy: 
-      matrix:
-        runner: [ubuntu-latest, macos-latest]
-    runs-on: ["${{ matrix.runner }}"]
+    runs-on: ubuntu-latest
     
     steps:
     - name: Set environment for script
-      run: |
-        if [[ "${{ inputs.environment }}" == "DEV" ]]; then 
-          echo "ENVIRONMENT=development" >> $GITHUB_ENV
-        elseif [[ "${{ inputs.environment }}" == "TEST" ]]; then
-          echo "ENVIRONMENT=stage" >> $GITHUB_ENV
-        else 
-          echo "ENVIRONMENT=production" >> $GITHUB_ENV
-        fi
-        
-    - name: Print the script      
-      run: |                     
-       echo "$ENVIRONMENT"
+      run: echo ${{ github.sha }}
+          
       
      
 
