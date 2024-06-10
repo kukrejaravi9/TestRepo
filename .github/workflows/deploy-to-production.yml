@@ -22,7 +22,7 @@ on:
 
 jobs:
   test2: 
-    runs-on: ubuntu-latest
+    runs-on: [ "${{ inputs.description == DEV && ubuntu-latest || macos-latest }}" ]
     
     steps:
     - name: Set environment for script
