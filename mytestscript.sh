@@ -2,7 +2,7 @@
 create_and_set_alias() {
   local output_name=$1
   local alias_url="https://$1"
- 
+  echo "Hello World"
    echo "${output_name}=https://${alias_url}" >> "$GITHUB_OUTPUT"
    echo "https://$alias_url"
    
