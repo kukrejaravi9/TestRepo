@@ -16,4 +16,5 @@ main(){
       echo "DEV_JDC: $alias_commit_jdc_id" >> $GITHUB_STEP_SUMMARY
       echo "CALL_THREE: $call_three" >> $GITHUB_STEP_SUMMARY
 }
-main
+echo "Hello World"
+main 
