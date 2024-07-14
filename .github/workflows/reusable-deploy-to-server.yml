@@ -15,7 +15,8 @@ jobs:
 
       - name: print outouts
         run:
-          echo ${{ steps.test-step.outputs.MY_CALL_ONE }}
+          echo "Printing Outputs"
+          echo  ${{ steps.test-step.outputs.MY_CALL_ONE }}
           echo ${{ steps.test-step.outputs.MY_CALL_TWO }}
           echo ${{ steps.test-step.outputs.MY_CALL_THREE }}
     
