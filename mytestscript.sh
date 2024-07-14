@@ -8,6 +8,7 @@ create_and_set_alias() {
 }
 
 main(){
+      echo "main is called"
       alias_commit_jlg_id=$(create_and_set_alias "MY_CALL_ONE")
       alias_commit_jdc_id=$(create_and_set_alias "MY_CALL_TWO")
       call_three=$(create_and_set_alias "MY_CALL_THREE")
