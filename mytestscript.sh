@@ -1,4 +1,4 @@
-
+ #!/bin/bash
 create_and_set_alias() {
   local output_name=$1
   local alias_url=$("https://$1")
