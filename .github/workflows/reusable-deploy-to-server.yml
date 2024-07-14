@@ -1,17 +1,20 @@
 name: Deploy to server
 on: 
-  workflow_call:
-    inputs:
-      some_input:
-        description: 'Some input description'
-        required: true
-        type: string    
+  workflow_dispatch 
 jobs: 
   wait_for_approval:    
-    runs-on: ["${{ inputs.some_input }}"]
+    runs-on: ubuntu-latest
     steps:
       - name: echo input
+        id: test-step
         run: 
-          echo ${{ inputs.some_input }}
+          chmod +x ./mytestscript.sh
+          bash mytestscript.sh
+
+      - name: print outouts
+        run:
+          echo ${{ steps.test-step.outputs.MY_CALL_ONE }}
+          echo ${{ steps.test-step.outputs.MY_CALL_TWO }}
+          echo ${{ steps.test-step.outputs.MY_CALL_THREE }}
     
   
