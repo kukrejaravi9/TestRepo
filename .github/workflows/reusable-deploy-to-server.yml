@@ -11,7 +11,7 @@ jobs:
         id: test-step
         run: 
           chmod +x ./mytestscript.sh
-          mytestscript.sh
+          bash mytestscript.sh
         shell: bash
 
       - name: print outouts
