@@ -5,6 +5,8 @@ create_and_set_alias() {
  
    echo "${output_name}=https://${alias_url}" >> "$GITHUB_OUTPUT"
    echo "https://$alias_url"
+   
+   echo "https://$alias_url"
 }
 
 main(){
