@@ -10,9 +10,8 @@ jobs:
       - name: echo input
         id: test-step
         run: 
-          chmod +x ./mytestscript.sh
+          #chmod +x ./mytestscript.sh
           bash mytestscript.sh
-        shell: bash
 
       - name: print outouts
         run:
