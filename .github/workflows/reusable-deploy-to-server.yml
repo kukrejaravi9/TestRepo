@@ -2,30 +2,29 @@ name: Deploy to server
 on: 
   workflow_dispatch:
     inputs:
-      import_destination:      
+      environment:      
         type: choice
         required: true
         options:
           - 'PROD'
           - 'TEST'
+
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+      set-environment:
+        type: string
     
 jobs: 
-  wait_for_approval:    
-    runs-on: [ubuntu-latest, "${{ inputs.import_destination || 'PROD'  }}", "${{ inputs.import_destination == 'PROD' && 'pend01' ||  inputs.import_destination }}", "${{ inputs.import_destination || 'pend01'  }}" ]
+  reusable-job:
+    environment: ${{ inputs.set-environment != 'false' && inputs.environment || '' }}
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
       
       - name: echo input
         id: test-step
-        run: 
-          #chmod +x ./mytestscript.sh
-          bash mytestscript.sh
-
-      - name: print outouts
-        run:
-          echo "Printing Outputs"
-          echo  ${{ steps.test-step.outputs.MY_CALL_ONE }}
-          echo ${{ steps.test-step.outputs.MY_CALL_TWO }}
-          echo ${{ steps.test-step.outputs.MY_CALL_THREE }}
+        run: echo "reusable job"
+    
     
   
