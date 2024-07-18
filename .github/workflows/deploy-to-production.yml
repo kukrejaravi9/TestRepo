@@ -1,8 +1,5 @@
 name: Build and Deploy - Production
-on:
-  schedule:
-    - cron: '* * * * *'
-    
+on:    
   workflow_dispatch:
     inputs:
       environment:
