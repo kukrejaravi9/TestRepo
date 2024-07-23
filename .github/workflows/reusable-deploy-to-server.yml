@@ -3,25 +3,14 @@ on:
   workflow_dispatch:
     inputs:
       environment:      
-        type: choice
-        required: true
-        options:
-          - 'PROD'
-          - 'TEST'
-
-  workflow_call:
-    inputs:
-      environment:
         type: string
-      set-environment:
-        type: string
+        required: false
     
 jobs: 
   reusable-job:
-    environment: ${{ inputs.set-environment != 'false' && inputs.environment || '' }}
+    environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
-    steps:
-      
+    steps:      
       - name: echo input
         id: test-step
         run: echo "reusable job"
