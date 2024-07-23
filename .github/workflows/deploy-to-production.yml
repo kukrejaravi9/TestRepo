@@ -2,7 +2,7 @@ name: Build and Deploy - Production
 on:    
   workflow_dispatch:
     inputs:
-      environment:
+      import-destination:
         description: 'Some input'
         required: true
         type: choice
@@ -10,11 +10,15 @@ on:
           - 'DEV'          
           - 'PROD'
           - 'TEST'
+          
+  schedule:
+    - cron: '* * * * *'
 
 jobs:
   call-reusable-job: 
-    uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
-    with:
-      environment: ${{ inputs.environment || 'PROD' }}
-      set-environment: ${{ github.event_name == 'schedule' && 'false' || 'true' }}
-    secrets: inherit
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.import-destination }}  
+    steps:    
+    - name: Create github app token 
+      run: echo 'hello world'
+      
