@@ -9,10 +9,7 @@ on:
         options: 
           - 'DEV'          
           - 'PROD'
-          - 'TEST'
-          
-  schedule:
-    - cron: '* * * * *'
+          - 'TEST'        
 
 jobs:
   call-reusable-job: 
