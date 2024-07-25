@@ -9,7 +9,10 @@ on:
         options: 
           - 'DEV'          
           - 'PROD'
-          - 'TEST'        
+          - 'TEST'       
+
+  schedule: 
+    - cron: '* * * * *'
 
 jobs:
   call-reusable-job: 
@@ -17,5 +20,7 @@ jobs:
     environment: ${{ inputs.import-destination }}  
     steps:    
     - name: Create github app token 
-      run: echo 'hello world'
+      env:
+        import-destination: ${{ import-destination }}
+      run: node myscript.js
       
