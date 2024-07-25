@@ -17,10 +17,9 @@ on:
 jobs:
   call-reusable-job: 
     runs-on: ubuntu-latest
-    environment: ${{ inputs.import-destination }}  
     steps:    
     - name: Create github app token 
       env:
-        import-destination: ${{ import-destination }}
+        import-destination: ${{ inputs.import-destination }}
       run: node myscript.js
       
