@@ -2,7 +2,7 @@ name: Build and Deploy - Production
 on:    
   workflow_dispatch:
     inputs:
-      import-destination:
+      import_destination:
         description: 'Some input'
         required: true
         type: choice
@@ -22,7 +22,7 @@ jobs:
       uses: actions/checkout@v4.1.7                
     - name: Create github app token 
       env:
-        import-destination: ${{ inputs.import-destination }}
+        import_destination: ${{ inputs.import_destination }}
       run: |
         node -v
         node myscript.js
