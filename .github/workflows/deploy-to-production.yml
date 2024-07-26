@@ -5,22 +5,15 @@ on:
       import_destination:
         description: 'Some input'
         required: true
-        type: choice
-        options: 
-          - 'DEV'          
-          - 'PROD'
-          - 'TEST'
+        type: integer
 
 jobs:
   call-reusable-job: 
-    runs-on: ubuntu-latest
-    steps:    
-    - name: Checkout
-      uses: actions/checkout@v4.1.7                
-    - name: Create github app token 
+    runs-on: macos-latest
+    steps:                
+    - name: Test env
       env:
-        import_destination: ${{ inputs.import_destination || 'Overridden' }}
+        import_destination: "${{ inputs.import_destination }}"
       run: |
-        node -v
-        node myscript.js
+       echo ${import_destination}
       
