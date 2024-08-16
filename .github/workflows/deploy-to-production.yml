@@ -1,19 +1,13 @@
 name: Build and Deploy - Production
 on:    
-  workflow_dispatch:
-    inputs:
-      import_destination:
-        description: 'Some input'
-        required: false
-        type: integer
-
+  push    
 jobs:
   call-reusable-job: 
     runs-on: macos-latest
     steps:                
     - name: Test env
       env:
-        import_destination: "${{ inputs.import_destination }}"
+        import_destination: "Hello"
       run: |
        echo ${import_destination}
       
