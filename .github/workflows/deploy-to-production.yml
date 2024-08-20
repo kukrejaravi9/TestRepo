@@ -9,6 +9,7 @@ jobs:
       env:
         import_destination: "Hello"
       run: |
+       exit 1
        echo ${import_destination}
   job_two:
     needs: [call-reusable-job]
