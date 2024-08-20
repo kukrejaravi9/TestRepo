@@ -10,4 +10,13 @@ jobs:
         import_destination: "Hello"
       run: |
        echo ${import_destination}
+  job_two:
+    needs: [call-reusable-job]
+    runs-on: macos-latest
+    steps:                
+    - name: Test env
+      env:
+        import_destination: "Hello"
+      run: |
+       echo "${{ needs.call-reusable-job.result }}"
       
