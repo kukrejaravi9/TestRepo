@@ -1,23 +1,25 @@
-name: Build and Deploy - Production
-on:    
-  push    
+name: Example Workflow
+
+on: [push]
+
 jobs:
-  call-reusable-job: 
-    runs-on: macos-latest
-    steps:                
-    - name: Test env
-      env:
-        import_destination: "Hello"
-      run: |
-       exit 1
-       echo ${import_destination}
-  job_two:
-    needs: [call-reusable-job]
-    runs-on: macos-latest
-    steps:                
-    - name: Test env
-      env:
-        import_destination: "Hello"
-      run: |
-       echo "${{ needs.call-reusable-job.result }}"
-      
+  job1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run some steps
+        run: echo "This is job 1"
+
+  job2:
+    runs-on: ubuntu-latest
+    needs: job1
+    if: always()
+    steps:
+      - name: Set workflow status
+        run: |
+          if [ "${{ needs.job1.result }}" == "success" ]; then
+            echo "Workflow Status: Success"
+          elif [ "${{ needs.job1.result }}" == "failure" ]; then
+            echo "Workflow Status: Failure"
+          elif [ "${{ github.event.workflow_run.conclusion }}" == "cancelled" ]; then
+            echo "Workflow Status: Cancelled"
+          fi
