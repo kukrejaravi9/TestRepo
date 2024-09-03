@@ -16,6 +16,6 @@ jobs:
           echo "WORKFLOW_CANCELLED=true" >> GITHUB_OUTPUT
 
       - name: Is cancelled
-        if: steps.test-step-two.outputs.WORKFLOW_CANCELLED == 'true'
+        if: ${{ steps.test-step-two.outputs.WORKFLOW_CANCELLED }} == 'true'
         run: echo "cancelled() == true"        
         
