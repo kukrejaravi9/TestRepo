@@ -23,5 +23,5 @@ jobs:
     needs: [ my_job_one ]
     uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
     with:
-      environment: needs.my_job_one.outputs.WORKFLOW_CANCELLED
+      environment: ${{ needs.my_job_one.outputs.WORKFLOW_CANCELLED }}
     secrets: inherit
