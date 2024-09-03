@@ -14,7 +14,7 @@ jobs:
 
       - name: Dummy
         id: test-step-two
-        if: ${{ cancelled }}
+        if: ${{ cancelled() }}
         run: |
           echo "WORKFLOW_CANCELLED=true" >> GITHUB_OUTPUT
         
