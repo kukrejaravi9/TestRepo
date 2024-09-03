@@ -25,3 +25,11 @@ jobs:
     with:
       environment: ${{ needs.my_job_one.outputs.WORKFLOW_CANCELLED }}
     secrets: inherit
+
+  slack_update_result_cancelled_another:
+    if: ${{ cancelled() }}
+    needs: [ my_job_one ]
+    uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
+    with:
+      environment: 'true'
+    secrets: inherit
