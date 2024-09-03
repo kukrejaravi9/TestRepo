@@ -6,7 +6,7 @@ jobs:
   my_job_one:
     runs-on: ubuntu-latest
     outputs:
-      WORKFLOW_CANCELLED: ${{ steps.test-step-two.WORKFLOW_CANCELLED }}
+      WORKFLOW_CANCELLED: ${{ steps.test-step-two.outputs.WORKFLOW_CANCELLED }}
     steps:      
       - name: echo input
         id: test-step
