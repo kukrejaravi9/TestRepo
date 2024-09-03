@@ -3,9 +3,25 @@ name: Example Workflow
 on: [push]
 
 jobs:
+  my_job_one:
+    runs-on: ubuntu-latest
+    outputs:
+      WORKFLOW_CANCELLED: ${{ steps.test-step-two.WORKFLOW_CANCELLED }}
+    steps:      
+      - name: echo input
+        id: test-step
+        run: echo "Hello World"
+
+      - name: Dummy
+        id: test-step-two
+        if: ${{ cancelled }}
+        run: |
+          echo "WORKFLOW_CANCELLED=true" >> GITHUB_OUTPUT
+        
   slack_update_result_cancelled:
-    if: ${{ always() }}    
+    if: ${{ always() }}
+    needs: [ my_job_one ]
     uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
     with:
-      environment: ${{ cancelled() && 'true' || 'false' }} 
+      environment: needs.my_job_one.outputs.WORKFLOW_CANCELLED
     secrets: inherit
