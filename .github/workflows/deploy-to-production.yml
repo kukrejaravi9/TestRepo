@@ -3,55 +3,19 @@ name: Example Workflow
 on: [push]
 
 jobs:
-  my_job_two:
-    runs-on: ubuntu-latest
-    outputs:
-      WORKFLOW_CANCELLED: ${{ steps.test-step-two.outputs.WORKFLOW_CANCELLED }}
-    steps:      
-      - name: echo input
-        id: test-step
-        run: echo "Hello World 123456"
-
-      - name: Dummy
-        id: test-step-two
-        run: |
-          echo "Hello World 123456"
-      - name: Is cancelled        
-        run: echo "Hello World 123456"
-
-  my_job_one:
-    needs: [my_job_two]
+  my_job_one:    
     if: ${{ always() }}
     runs-on: ubuntu-latest
     outputs:
       WORKFLOW_CANCELLED: ${{ steps.test-step-two.outputs.WORKFLOW_CANCELLED }}
     steps:      
-      - name: echo input
-        id: test-step
-        run: echo "Hello World 123456"
 
       - name: Dummy
         id: test-step-two
-        if: cancelled()
         run: |
           echo "WORKFLOW_CANCELLED=true" >> GITHUB_OUTPUT
 
       - name: Is cancelled
-        if: cancelled()
+        if: steps.test-step-two.outputs.WORKFLOW_CANCELLED == 'true'
         run: echo "cancelled() == true"        
         
-  slack_update_result_cancelled:
-    if: ${{ always() }}
-    needs: [ my_job_one,  my_job_two]
-    uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
-    with:
-      environment: ${{ needs.my_job_one.outputs.WORKFLOW_CANCELLED }}
-    secrets: inherit
-
-  slack_update_result_cancelled_another:
-    if: ${{ cancelled() }}
-    needs: [ my_job_one ]
-    uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
-    with:
-      environment: 'true'
-    secrets: inherit
