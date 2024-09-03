@@ -10,7 +10,7 @@ jobs:
     steps:      
       - name: echo input
         id: test-step
-        run: echo "Hello World 12345"
+        run: echo "Hello World 123456"
 
       - name: Dummy
         id: test-step-two
