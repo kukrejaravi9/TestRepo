@@ -21,6 +21,7 @@ jobs:
 
   my_job_one:
     needs: [my_job_two]
+    if: ${{ always() }}
     runs-on: ubuntu-latest
     outputs:
       WORKFLOW_CANCELLED: ${{ steps.test-step-two.outputs.WORKFLOW_CANCELLED }}
