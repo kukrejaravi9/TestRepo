@@ -5,15 +5,20 @@ on:
       environment:      
         type: string
         required: false
+
+  workflow_call:
+    inputs:
+      environment:      
+        type: string
+        required: false
     
 jobs: 
   reusable-job:
-    environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:      
       - name: echo input
         id: test-step
-        run: echo "reusable job"
+        run: echo ${{ inputs.environment }}
     
     
   
