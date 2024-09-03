@@ -14,9 +14,13 @@ jobs:
 
       - name: Dummy
         id: test-step-two
-        if: ${{ cancelled() }}
+        if: cancelled()
         run: |
           echo "WORKFLOW_CANCELLED=true" >> GITHUB_OUTPUT
+
+      - name: Is cancelled
+        if: cancelled()
+        run: echo "cancelled() == true"
         
   slack_update_result_cancelled:
     if: ${{ always() }}
