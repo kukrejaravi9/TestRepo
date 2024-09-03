@@ -3,7 +3,24 @@ name: Example Workflow
 on: [push]
 
 jobs:
+  my_job_two:
+    runs-on: ubuntu-latest
+    outputs:
+      WORKFLOW_CANCELLED: ${{ steps.test-step-two.outputs.WORKFLOW_CANCELLED }}
+    steps:      
+      - name: echo input
+        id: test-step
+        run: echo "Hello World 123456"
+
+      - name: Dummy
+        id: test-step-two
+        run: |
+          echo "Hello World 123456"
+      - name: Is cancelled        
+        run: echo "Hello World 123456"
+
   my_job_one:
+    needs: [my_job_two]
     runs-on: ubuntu-latest
     outputs:
       WORKFLOW_CANCELLED: ${{ steps.test-step-two.outputs.WORKFLOW_CANCELLED }}
@@ -20,11 +37,11 @@ jobs:
 
       - name: Is cancelled
         if: cancelled()
-        run: echo "cancelled() == true"
+        run: echo "cancelled() == true"        
         
   slack_update_result_cancelled:
     if: ${{ always() }}
-    needs: [ my_job_one ]
+    needs: [ my_job_one,  my_job_two]
     uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
     with:
       environment: ${{ needs.my_job_one.outputs.WORKFLOW_CANCELLED }}
