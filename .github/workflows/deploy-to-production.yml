@@ -3,23 +3,9 @@ name: Example Workflow
 on: [push]
 
 jobs:
-  job1:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set up Node.js
-        uses: actions/setup-node@v4.0.3
-        with:
-          node-version: '16'
-
-      - name: Cache npm dependencies
-        id: cache-npm
-        uses: actions/cache@v4.0.2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-
-      - name: Install global dependencies
-        run: |
-          npm install -g uglify-js
-          npm install -g clean-css-cli
-          echo 'hello'
+  slack_update_result_cancelled:
+    if: ${{ always() }}    
+    uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
+    with:
+      environment: ${{ cancelled() && 'true' || 'false' }} 
+    secrets: inherit
