@@ -10,7 +10,7 @@ jobs:
     steps: 
       - name: Set image tag
         id: set_image_tag
-        run: echo "IMAGE_TAG=$(date -u + '%y.%m.%d')" >> "$GITHUB_OUTPUT"
+        run: echo "IMAGE_TAG=$(date -u +'%Y.%m.%d')" >> $GITHUB_OUTPUT
 
   check_image_tag:
     runs-on: ubuntu-latest  
