@@ -3,18 +3,20 @@ name: build-push-deploy
 on:
   workflow_dispatch:
 jobs:
-  create_image_tag:
+  create_image_tag:  
+    strategy:
+      matrix:
+        env: ['dev', 'test', 'prod']  
+      max-parallel: 1
+    environment: ${{ matrix.env }}        
     runs-on: ubuntu-latest
     outputs:      
         IMAGE_TAG: ${{ steps.set_image_tag.outputs.IMAGE_TAG }}
     steps: 
       - name: Set image tag
         id: set_image_tag
-        run: echo "IMAGE_TAG=$(date -u +'%Y.%m.%d')" >> $GITHUB_OUTPUT
+        run: |
+          echo "IMAGE_TAG=$(date -u +'%Y.%m.%d')" >> $GITHUB_OUTPUT
+          echo ${{ matrix.env }}
 
-  check_image_tag:
-    runs-on: ubuntu-latest  
-    needs: [create_image_tag]
-    steps:
-      - name: Check image version
-        run: echo ${{ needs.create_image_tag.outputs.IMAGE_TAG }}
+
