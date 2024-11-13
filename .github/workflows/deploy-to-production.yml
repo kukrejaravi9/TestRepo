@@ -16,7 +16,7 @@ jobs:
       - name: Set image tag
         id: set_image_tag
         run: |
-          echo "IMAGE_TAG=$(date -u +'%Y.%m.%d')" >> $GITHUB_OUTPUT
+          echo "IMAGE_TAG=$(date -u +'%Y.%m.%d-%H%M%S')" >> $GITHUB_OUTPUT
           echo ${{ matrix.env }}
 
 
