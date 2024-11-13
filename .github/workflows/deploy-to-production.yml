@@ -19,4 +19,7 @@ jobs:
           echo "IMAGE_TAG=$(date -u +'%Y.%m.%d-%H%M%S')" >> $GITHUB_OUTPUT
           echo ${{ matrix.env }}
 
+      - name: image tag
+        run: echo ${{ steps.set_image_tag.outputs.IMAGE_TAG }}
+
 
