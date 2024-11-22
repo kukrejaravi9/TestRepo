@@ -1,14 +1,6 @@
 name: Build, Push, and Deploy to Azure
 on:
   workflow_dispatch:
-    inputs:
-      AZURE_REPOSITORY:
-        required: true
-        type: string
-        description: Repo to target(i.e. jlg-id)
-
-run-name: ${{inputs.AZURE_REPOSITORY}}
-
 
 jobs:
   create_image_tag:
