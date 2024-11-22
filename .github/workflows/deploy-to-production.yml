@@ -24,7 +24,7 @@ jobs:
         run: |
           echo '### Dispatched Job To Stage Environment🚀' >> $GITHUB_STEP_SUMMARY
           echo 'Follow the link below to your workflow run:' >> $GITHUB_STEP_SUMMARY
-          echo 'Link: https://www.github.com/${{github.repository_owner}}/TestRepo/actions/workflows/deploy-to-production.yml' >> $GITHUB_STEP_SUMMARY
+          echo 'Link: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}' >> $GITHUB_STEP_SUMMARY
           echo 'Image Tag: ${{needs.create_image_tag.outputs.IMAGE_TAG}}' >> $GITHUB_STEP_SUMMARY          
 
   distribute:
