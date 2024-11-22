@@ -1,11 +1,57 @@
-name: build-push-deploy
+name: Build, Push, and Deploy to Azure
 on:
   workflow_dispatch:
+    inputs:
+      AZURE_REPOSITORY:
+        required: true
+        type: string
+        description: Repo to target(i.e. jlg-id)
+
+run-name: ${{inputs.AZURE_REPOSITORY}}
+
+
 jobs:
-  build:    
-    uses: kukrejaravi9/test-repo/.github/workflows/main_angular-php-test.yml@main
-    with:      
-      ENV_NAME: 'Hello World'
-    secrets: inherit
-    permissions:
-      contents: write
+  create_image_tag:
+    runs-on: ubuntu-latest
+    outputs:      
+        IMAGE_TAG: ${{ steps.set_image_tag.outputs.IMAGE_TAG }}
+    steps: 
+      - name: Set image tag
+        id: set_image_tag
+        run: echo "IMAGE_TAG=$(date -u +'%Y.%m.%d-%H%M%S')" >> $GITHUB_OUTPUT
+  build:
+    needs: [create_image_tag]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate Token(GitHub Verified Action)
+        run: |
+          echo ${{ needs.create_image_tag.outputs.IMAGE_TAG }}
+
+
+      - name: Adding markdown
+        run: |
+          echo '### Dispatched Job To Stage Environment🚀' >> $GITHUB_STEP_SUMMARY
+          echo 'Follow the link below to your workflow run:' >> $GITHUB_STEP_SUMMARY
+          echo 'Link: https://www.github.com/${{github.repository_owner}}/TestRepo/actions/workflows/deploy-to-production.yml' >> $GITHUB_STEP_SUMMARY
+          echo 'Image Tag: ${{needs.create_image_tag.outputs.IMAGE_TAG}}' >> $GITHUB_STEP_SUMMARY          
+
+  distribute:
+    needs: [create_image_tag, build]
+    strategy:
+          matrix:
+            profile_environment: ['dev', 'test', 'prod']
+          max-parallel: 1
+    environment: ${{ matrix.profile_environment }}    
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Log in to ACR
+        run: |
+          echo ${{ needs.create_image_tag.outputs.IMAGE_TAG }}
+
+      - name: Adding markdown
+        run: |
+          echo '### Dispatched Job To ${{ ${{ matrix.profile_environment }}     }} Environment🚀' >> $GITHUB_STEP_SUMMARY
+          echo 'Follow the link below to your workflow run:' >> $GITHUB_STEP_SUMMARY
+          echo 'Link: https://www.github.com/${{github.repository_owner}}/TestRepo/actions/workflows/deploy-to-production.yml' >> $GITHUB_STEP_SUMMARY
+          echo 'Image Tag: ${{needs.create_image_tag.outputs.IMAGE_TAG}}' >> $GITHUB_STEP_SUMMARY
