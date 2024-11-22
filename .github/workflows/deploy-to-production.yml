@@ -1,6 +1,7 @@
 name: Build, Push, and Deploy to Azure
 on:
   workflow_call:
+  workflow_dispatch:
   
 jobs:
   create_image_tag:
