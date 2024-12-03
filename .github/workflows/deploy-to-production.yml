@@ -14,8 +14,10 @@ jobs:
 
       - name: Get latest tag from ghcr.io
         id: get-latest-tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          tags=$(curl -s https://ghcr.io/v2/actions/gha-runner-scale-set-controller/tags/list | jq -r '.tags[]')
+          tags=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" https://ghcr.io/v2/actions/gha-runner-scale-set-controller/tags/list | jq -r '.tags[]')
           latest_tag=$(echo "$tags" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -n 1)
           echo "Latest tag: $latest_tag"
           echo "::set-output name=latest_tag::$latest_tag"
