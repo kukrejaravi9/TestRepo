@@ -1,50 +1,24 @@
-name: Build, Push, and Deploy to Azure
+name: Get Latest Image Tag
+
 on:
-  workflow_call:
-  workflow_dispatch:
-  
+  push:
+    branches:
+      - main
+
 jobs:
-  create_image_tag:
-    runs-on: ubuntu-latest
-    outputs:      
-        IMAGE_TAG: ${{ steps.set_image_tag.outputs.IMAGE_TAG }}
-    steps: 
-      - name: Set image tag
-        id: set_image_tag
-        run: echo "IMAGE_TAG=$(date -u +'%Y.%m.%d-%H%M%S')" >> $GITHUB_OUTPUT
-  build:
-    needs: [create_image_tag]
+  get-latest-tag:
     runs-on: ubuntu-latest
     steps:
-      - name: Generate Token(GitHub Verified Action)
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Get latest tag from ghcr.io
+        id: get-latest-tag
         run: |
-          echo ${{ needs.create_image_tag.outputs.IMAGE_TAG }}
+          tags=$(curl -s https://ghcr.io/v2/actions/gha-runner-scale-set-controller/tags/list | jq -r '.tags[]')
+          latest_tag=$(echo "$tags" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -n 1)
+          echo "Latest tag: $latest_tag"
+          echo "::set-output name=latest_tag::$latest_tag"
 
-
-      - name: Adding markdown
-        run: |
-          echo '### Dispatched Job To Stage Environment🚀' >> $GITHUB_STEP_SUMMARY
-          echo 'Follow the link below to your workflow run:' >> $GITHUB_STEP_SUMMARY
-          echo 'Link: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}' >> $GITHUB_STEP_SUMMARY
-          echo 'Image Tag: ${{needs.create_image_tag.outputs.IMAGE_TAG}}' >> $GITHUB_STEP_SUMMARY          
-
-  distribute:
-    needs: [create_image_tag, build]
-    strategy:
-          matrix:
-            profile_environment: ['dev', 'test', 'prod']
-          max-parallel: 1
-    environment: ${{ matrix.profile_environment }}    
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Log in to ACR
-        run: |
-          echo ${{ needs.create_image_tag.outputs.IMAGE_TAG }}
-
-      - name: Adding markdown
-        run: |
-          echo '### Dispatched Job To ${{ matrix.profile_environment }}   Environment🚀' >> $GITHUB_STEP_SUMMARY
-          echo 'Follow the link below to your workflow run:' >> $GITHUB_STEP_SUMMARY
-          echo 'Link: https://www.github.com/${{github.repository_owner}}/TestRepo/actions/workflows/deploy-to-production.yml' >> $GITHUB_STEP_SUMMARY
-          echo 'Image Tag: ${{needs.create_image_tag.outputs.IMAGE_TAG}}' >> $GITHUB_STEP_SUMMARY
+      - name: Use latest tag
+        run: echo "The latest tag is ${{ steps.get-latest-tag.outputs.latest_tag }}"
