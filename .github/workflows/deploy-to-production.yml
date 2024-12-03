@@ -17,14 +17,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          tags=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" https://ghcr.io/v2/actions/gha-runner-scale-set-controller/tags/list | jq -r '.tags[]')
-          if [ -z "$tags" ]; then
-            echo "No tags found or authentication failed"
-            exit 1
-          fi
-          latest_tag=$(echo "$tags" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -n 1)
-          echo "Latest tag: $latest_tag"
-          echo "::set-output name=latest_tag::$latest_tag"
-
+          gh release list --exclude-drafts --exclude-pre-releases --limit 1 -R actions/actions-runner-controller | grep -oP '(?<=gha-runner-scale-set-)[0-9.]+' | head -1
+          gh release list --exclude-drafts --exclude-pre-releases --limit 1 -R actions/runner | grep -oP '(?<=v)[0-9.]+' | head -1
+          
       - name: Use latest tag
         run: echo "The latest tag is ${{ steps.get-latest-tag.outputs.latest_tag }}"
