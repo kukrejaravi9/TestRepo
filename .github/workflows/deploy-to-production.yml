@@ -40,8 +40,6 @@ jobs:
               packagesource=$(echo "$item" | jq -r '.packagesource')
 
               mypackagesource=$(echo "$item" | jq -r '.packagesource123')
-
-              mypackagesource.toString()
               
               # Error handling
               #if [[ $? -ne 0 ]]; then
