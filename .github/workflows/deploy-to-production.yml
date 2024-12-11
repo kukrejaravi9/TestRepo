@@ -15,6 +15,9 @@ jobs:
       - name: Get latest tag from ghcr.io
         id: get-latest-tag
         run: |
+          #!/bin/bash
+          
+          # Ensure jq is installed
           if ! command -v jq &> /dev/null
           then
               echo "jq could not be found, installing..."
@@ -33,6 +36,22 @@ jobs:
           
           # Loop through the array and print packagesource
           jq -c '.[]' "$json_file" | while read -r item; do
+              packagename=$(echo "$item" | jq -r '.packagename')
               packagesource=$(echo "$item" | jq -r '.packagesource')
-              echo "packagesource: $packagesource"
+
+              
+              # Error handling
+              #if [[ $? -ne 0 ]]; then
+                  #echo "An error occurred while processing: $packagename. Error: Failed to parse JSON."
+                  #continue
+              #fi
+          
+              # Simulate processing and error handling
+              {
+                  # Replace the following line with actual processing logic
+                  echo "Processing packagesource: $packagesource"
+              } || {
+                  echo "An error occurred while processing: $packagename. Error: $?"
+                  continue
+              }
           done
