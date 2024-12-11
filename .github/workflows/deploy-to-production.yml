@@ -39,7 +39,7 @@ jobs:
               packagename=$(echo "$item" | jq -r '.packagename')
               packagesource=$(echo "$item" | jq -r '.packagesource')
 
-              vercel --help
+              
               
               # Error handling
               #if [[ $? -ne 0 ]]; then
@@ -50,6 +50,7 @@ jobs:
               # Simulate processing and error handling
               {
                   # Replace the following line with actual processing logic
+                  vercel --help
                   echo "Processing packagesource: $packagesource"
               } || {
                   echo "An error occurred while processing: $packagename. Error: $?"
