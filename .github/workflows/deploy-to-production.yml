@@ -52,6 +52,7 @@ jobs:
               
               # Simulate processing and error handling
               {
+                  echo "An error occurred while processing: $packagename"
                   # Replace the following line with actual processing logic
                   Echo hello world
               } || {
