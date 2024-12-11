@@ -50,7 +50,7 @@ jobs:
               # Simulate processing and error handling
               {
                   # Replace the following line with actual processing logic
-                  vercel --help
+                  Echo hello world
                   echo "Processing packagesource: $packagesource"
               } || {
                   echo "An error occurred while processing: $packagename. Error: $?"
