@@ -1,7 +1,6 @@
 [
   {
-    "packagename": "package1",
-    "packagesource": "source1"
+    "packagename": "package1"
   },
   {
     "packagename": "package2",
