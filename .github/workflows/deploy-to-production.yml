@@ -15,6 +15,9 @@ jobs:
       - name: Get latest tag from ghcr.io
         id: get-latest-tag
         run: |
+
+          Echo hello world
+           
           #!/bin/bash
           
           # Ensure jq is installed
