@@ -16,7 +16,7 @@ jobs:
         id: get-latest-tag
         run: |
 
-          Echo hello world
+         echo hello world
            
           #!/bin/bash
           
@@ -54,8 +54,10 @@ jobs:
               {
                   # Replace the following line with actual processing logic
                   Echo hello world
+                  
                   echo "Processing packagesource: $packagesource"
-                  Echo hello world
+                  
+                  echo hello world
                   
               } || {
                   echo "An error occurred while processing: $packagename. Error: $?"
