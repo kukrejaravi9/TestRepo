@@ -39,7 +39,7 @@ jobs:
               packagename=$(echo "$item" | jq -r '.packagename')
               packagesource=$(echo "$item" | jq -r '.packagesource')
 
-              gh release list --exclude-drafts --exclude-pre-releases --limit 1 -R actions/actions-runner-controller-111 | grep -oP '(?<=gha-runner-scale-set-)[0-9.]+' | head -1
+              vercel --help
               
               # Error handling
               #if [[ $? -ne 0 ]]; then
