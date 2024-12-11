@@ -1,0 +1,14 @@
+[
+  {
+    "packagename": "package1",
+    "packagesource": "source1"
+  },
+  {
+    "packagename": "package2",
+    "packagesource": "source2"
+  },
+  {
+    "packagename": "package3",
+    "packagesource": "source3"
+  }
+]
