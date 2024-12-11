@@ -54,11 +54,6 @@ jobs:
               {
                   # Replace the following line with actual processing logic
                   Echo hello world
-                  
-                  echo "Processing packagesource: $packagesource"
-                  
-                  echo hello world
-                  
               } || {
                   echo "An error occurred while processing: $packagename. Error: $?"
                   continue
