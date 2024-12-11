@@ -14,11 +14,25 @@ jobs:
 
       - name: Get latest tag from ghcr.io
         id: get-latest-tag
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release list --exclude-drafts --exclude-pre-releases --limit 1 -R actions/actions-runner-controller | grep -oP '(?<=gha-runner-scale-set-)[0-9.]+' | head -1
-          gh release list --exclude-drafts --exclude-pre-releases --limit 1 -R actions/runner | grep -oP '(?<=v)[0-9.]+' | head -1
+          if ! command -v jq &> /dev/null
+          then
+              echo "jq could not be found, installing..."
+              sudo apt-get update
+              sudo apt-get install -y jq
+          fi
           
-      - name: Use latest tag
-        run: echo "The latest tag is ${{ steps.get-latest-tag.outputs.latest_tag }}"
+          # Read and process the JSON data
+          json_file="mydata.json"
+          
+          # Check if the JSON file exists
+          if [[ ! -f "$json_file" ]]; then
+              echo "File $json_file does not exist."
+              exit 1
+          fi
+          
+          # Loop through the array and print packagesource
+          jq -c '.[]' "$json_file" | while read -r item; do
+              packagesource=$(echo "$item" | jq -r '.packagesource')
+              echo "packagesource: $packagesource"
+          done
