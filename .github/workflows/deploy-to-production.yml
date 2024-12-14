@@ -47,4 +47,9 @@ jobs:
                 fi
                 
                 echo "------Processing: $acr_image_name ------"
+              } || {
+                  echo "An error occurred while processing: Error: $?"
+                  continue
+              }
+          done                
                
