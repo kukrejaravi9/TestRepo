@@ -40,6 +40,7 @@ jobs:
                 image_tag_prefix=$(echo "$item" | jq -r '.image_tag_prefix')
                 applicable_environment=$(echo "$item" | jq -r '.applicable_environment | @csv')
                 
+                echo "Applicable Environment: $applicable_environment"
                 # Check if the current environment is in the applicable environments
                 if [[ ! ",$applicable_environment," == *",$current_environment,"* ]]; then
                   echo "Skipping $acr_image_name as it is not applicable for the $current_environment environment."
