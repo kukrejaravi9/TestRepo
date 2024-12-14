@@ -38,7 +38,7 @@ jobs:
                 docker_file_folder_path=$(echo "$item" | jq -r '.docker_file_folder_path')
                 base_image_name=$(echo "$item" | jq -r '.base_image_name')
                 image_tag_prefix=$(echo "$item" | jq -r '.image_tag_prefix')
-                applicable_environment=$(echo "$item" | jq -r '.applicable_environment | @csv')
+                applicable_environment=$(echo "$item" | jq -r '.applicable_environment[]')
                 
                 echo "Applicable Environment: $applicable_environment"
                 # Check if the current environment is in the applicable environments
