@@ -11,7 +11,7 @@
     "docker_file_folder_path": "base/arc/docker",
     "base_image_name": "gha-runner-scale-set-controller-base",
     "image_tag_prefix": "",
-    "applicable_environment": ["dev"]
+    "applicable_environment": ["dev", "stg"]
   },
   {
     "image_source_repository": "actions/runner",
