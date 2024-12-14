@@ -1,13 +1,44 @@
 [
   {
-    "packagename": "package1"
+    "image_source_repository": "actions/actions-runner-controller",
+    "tag_extractor_string": "gha-runner-scale-set-",
+    "acr_image_name": "gha-runner-scale-set-controller",
+    "is_docker_image": "1",
+    "docker_file_path": "base/arc/docker/Dockerfile-controller",
+    "docker_substitution_source": "ghcr.io/actions/gha-runner-scale-set-controller",
+    "docker_substitution_target": "gha-runner-scale-set-controller-base",
+    "acr_base_image_import_source": "ghcr.io/actions/gha-runner-scale-set-controller",
+    "docker_file_folder_path": "base/arc/docker",
+    "base_image_name": "gha-runner-scale-set-controller-base",
+    "image_tag_prefix": "",
+    "applicable_environment": ["dev"]
   },
   {
-    "packagename": "package2",
-    "packagesource": "source2"
+    "image_source_repository": "actions/runner",
+    "tag_extractor_string": "v",
+    "acr_image_name": "actions-runner",
+    "is_docker_image": "1",
+    "docker_file_path": "base/arc/docker/Dockerfile-runner",
+    "docker_substitution_source": "ghcr.io/actions/actions-runner",
+    "docker_substitution_target": "actions-runner-base",
+    "acr_base_image_import_source": "ghcr.io/actions/actions-runner",
+    "docker_file_folder_path": "base/arc/docker",
+    "base_image_name": "actions-runner-base",
+    "image_tag_prefix": "",
+    "applicable_environment": ["dev"]
   },
   {
-    "packagename": "package3",
-    "packagesource": "source3"
+    "image_source_repository": "gimlet-io/capacitor",
+    "tag_extractor_string": "v",
+    "acr_image_name": "gimlet-io/capacitor",
+    "is_docker_image": "0",
+    "docker_file_path": "",
+    "docker_substitution_source": "",
+    "docker_substitution_target": "",
+    "acr_base_image_import_source": "ghcr.io/gimlet-io/capacitor",
+    "docker_file_folder_path": "",
+    "base_image_name": "gimlet-io/capacitor",
+    "image_tag_prefix": "v",
+    "applicable_environment": ["dev"]
   }
 ]
