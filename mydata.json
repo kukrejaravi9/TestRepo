@@ -25,7 +25,7 @@
     "docker_file_folder_path": "base/arc/docker",
     "base_image_name": "actions-runner-base",
     "image_tag_prefix": "",
-    "applicable_environment": ["dev"]
+    "applicable_environment": ["stg"]
   },
   {
     "image_source_repository": "gimlet-io/capacitor",
@@ -39,6 +39,6 @@
     "docker_file_folder_path": "",
     "base_image_name": "gimlet-io/capacitor",
     "image_tag_prefix": "v",
-    "applicable_environment": ["dev"]
+    "applicable_environment": ["stg"]
   }
 ]
