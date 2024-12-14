@@ -7,6 +7,7 @@ on:
 
 jobs:
   get-latest-tag:
+    environment: stg
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -15,43 +16,6 @@ jobs:
       - name: Get latest tag from ghcr.io
         id: get-latest-tag
         run: |          
-          # Ensure jq is installed
-          if ! command -v jq &> /dev/null
-          then
-              echo "jq could not be found, installing..."
-              sudo apt-get update
-              sudo apt-get install -y jq
-          fi
+          current_environment="${{ github.job.environment }}"
+          echo "Current Environment: $current_environment"
           
-          # Read and process the JSON data
-          json_file="mydata.json"
-          
-          # Check if the JSON file exists
-          if [[ ! -f "$json_file" ]]; then
-              echo "File $json_file does not exist."
-              exit 1
-          fi
-          
-          # Loop through the array and print packagesource
-          jq -c '.[]' "$json_file" | while read -r item; do
-              packagename=$(echo "$item" | jq -r '.packagename')
-              packagesource=$(echo "$item" | jq -r '.packagesource')
-
-              
-              
-              # Error handling
-              #if [[ $? -ne 0 ]]; then
-                  #echo "An error occurred while processing: $packagename. Error: Failed to parse JSON."
-                  #continue
-              #fi
-              
-              # Simulate processing and error handling
-              {
-                  echo "Processing: $packagename"
-                  # Replace the following line with actual processing logic
-                  Echo hello world
-              } || {
-                  echo "An error occurred while processing: $packagename. Error: $?"
-                  continue
-              }
-          done
