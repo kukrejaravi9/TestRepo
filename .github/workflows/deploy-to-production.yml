@@ -42,7 +42,7 @@ jobs:
                 
                 echo "Applicable Environment: $applicable_environment"
                 # Check if the current environment is in the applicable environments
-                if [[ ! ",$applicable_environment," == *",$current_environment,"* ]]; then
+                if [[ ! " ${applicable_environment[@]} " =~ " ${current_environment} " ]]; then
                   echo "Skipping $acr_image_name as it is not applicable for the $current_environment environment."
                   continue
                 fi
