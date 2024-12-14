@@ -11,7 +11,7 @@
     "docker_file_folder_path": "base/arc/docker",
     "base_image_name": "gha-runner-scale-set-controller-base",
     "image_tag_prefix": "",
-    "applicable_environment": ["dev", "stg"]
+    "applicable_environment": ["stg", "qa"]
   },
   {
     "image_source_repository": "actions/runner",
@@ -25,7 +25,7 @@
     "docker_file_folder_path": "base/arc/docker",
     "base_image_name": "actions-runner-base",
     "image_tag_prefix": "",
-    "applicable_environment": ["stg"]
+    "applicable_environment": ["dev", "qa"]
   },
   {
     "image_source_repository": "gimlet-io/capacitor",
@@ -40,5 +40,19 @@
     "base_image_name": "gimlet-io/capacitor",
     "image_tag_prefix": "v",
     "applicable_environment": ["stg"]
+  },
+    {
+    "image_source_repository": "gimlet-io/capacitor1234",
+    "tag_extractor_string": "v",
+    "acr_image_name": "gimlet-io/capacitor1234",
+    "is_docker_image": "0",
+    "docker_file_path": "",
+    "docker_substitution_source": "",
+    "docker_substitution_target": "",
+    "acr_base_image_import_source": "ghcr.io/gimlet-io/capacitor",
+    "docker_file_folder_path": "",
+    "base_image_name": "gimlet-io/capacitor",
+    "image_tag_prefix": "v",
+    "applicable_environment": ["dev"]
   }
 ]
