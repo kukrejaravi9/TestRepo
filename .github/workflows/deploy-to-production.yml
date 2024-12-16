@@ -9,7 +9,8 @@ jobs:
   get-latest-tag:
     strategy:
           matrix:
-            profile_environment: ['dev', 'test', 'prod']  
+            profile_environment: ['dev', 'test', 'prod']
+          max-parallel: 1
     environment: ${{ matrix.profile_environment }}
     runs-on: ubuntu-latest
     steps:
