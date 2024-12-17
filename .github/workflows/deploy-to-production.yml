@@ -19,9 +19,13 @@ jobs:
 
       - name: Get latest tag from ghcr.io
         id: get-latest-tag
-        env:
-          latest_tag: "1.11.999"
+
+      - name: Set latest_tag variable
         run: |
-          latest_tag="1.11.999"
+          latest_tag="9.11.1"  # Set latest_tag variable here        
+      
+      - name: Set latest_tag variable 1
+        run: |          
           yq eval '(.images[] | select(.name == "ghcr.io/actions/gha-runner-scale-set-controller") | .newTag) =  strenv(latest_tag)' -i mynewfile.yml
+        shell: bash
           
