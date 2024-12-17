@@ -19,51 +19,7 @@ jobs:
 
       - name: Get latest tag from ghcr.io
         id: get-latest-tag
-        env:
-          CURRENT_ENVIRONMENT: ${{ job.environment }}  # Set the environment variable        
-        run: |   
-
-          echo "-------------------${{ matrix.profile_environment }}--------------------"
-          json_file="mydata.json"
-          # Check if the JSON file exists
-          if [[ ! -f "$json_file" ]]; then
-              echo "File $json_file does not exist."
-              exit 1
-          fi
-          current_environment="stg"
-          jq -c '.[]' "$json_file" | while read -r item; do
-              {
-                image_source_repository=$(echo "$item" | jq -r '.image_source_repository')
-                tag_extractor_string=$(echo "$item" | jq -r '.tag_extractor_string')
-                acr_image_name=$(echo "$item" | jq -r '.acr_image_name')
-                is_docker_image=$(echo "$item" | jq -r '.is_docker_image')
-                docker_file_path=$(echo "$item" | jq -r '.docker_file_path')
-                docker_substitution_source=$(echo "$item" | jq -r '.docker_substitution_source')
-                docker_substitution_target=$(echo "$item" | jq -r '.docker_substitution_target')
-                acr_base_image_import_source=$(echo "$item" | jq -r '.acr_base_image_import_source')
-                docker_file_folder_path=$(echo "$item" | jq -r '.docker_file_folder_path')
-                base_image_name=$(echo "$item" | jq -r '.base_image_name')
-                image_tag_prefix=$(echo "$item" | jq -r '.image_tag_prefix')
-                applicable_environments=$(echo "$item" | jq -r '.applicable_environment[]')
-                
-                # Check if the current environment is in the applicable environments
-                environment_match=false
-                for env in ${applicable_environments[@]}; do
-                  if [[ "$env" == "$current_environment" ]]; then
-                    environment_match=true
-                    break
-                  fi
-                done
-
-                if [[ "$environment_match" == "false" ]]; then
-                  echo "Skipping $acr_image_name as it is not applicable for the $current_environment environment."
-                  continue
-                fi
-                
-                echo "------Processing: $acr_image_name ------"
-              } || {
-                  echo "An error occurred while processing: Error: $?"
-                  continue
-              }
-          done                
-               
+        run: |
+          latest_tag="1.11.999"
+          yq eval '(.images[] | select(.name == "ghcr.io/actions/gha-runner-scale-set-controller") | .newTag) =  env(latest_tag)' -i mynewfile.yml
+          
