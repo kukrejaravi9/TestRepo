@@ -1,0 +1,54 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base/default
+  - ../../base/ingress-nginx
+  - ../../base/kube-system
+  - ../../base/sentinelone
+  - ../../base/capacitor
+  - ../../base/external-secrets
+  - ../../base/secrets
+  - ../../base/secrets/ads
+  - ../../base/rbac/ads
+  - ../../base/keda
+  - ../../base/arc
+  - ../../base/nexus
+  - resources/github-secrets.yaml
+  - resources/arc-hook-extension.yaml
+  - resources/workload-identities.yaml
+images:
+  - name: ghcr.io/gimlet-io/capacitor
+    newName: gimlet-io/capacitor
+    newTag: v0.2.0
+  - name: crunchyblue/bastion
+    newName: bastion
+  - name: ghcr.io/external-secrets/external-secrets
+    newName: external-secrets
+    newTag: v0.9.13
+  - name: registry.k8s.io/ingress-nginx/kube-webhook-certgen
+    newName: ingress-nginx/kube-webhook-certgen
+    newTag: v1.4.4
+  - name: registry.k8s.io/ingress-nginx/controller
+    newName: ingress-nginx/controller
+    newTag: v1.11.3
+  - name: accakscntrregstg.azurecr.us/s1helper
+    newName: s1helper
+  - name: accakscntrregstg.azurecr.us/s1agent
+    newName: s1agent
+  - name: ghcr.io/actions/gha-runner-scale-set-controller
+    newName: gha-runner-scale-set-controller
+    newTag: "1.11.1"
+patches:
+  - path: patches/default/storage-class-patch.yaml
+  - path: patches/ingress-nginx/ingress-nginx-service-patch.yaml
+  - path: patches/external-secrets/secret-store-patch.yaml
+  - path: patches/keda/trigger-authentication-patch.yaml
+  - path: patches/arc/arc-system-patch.yaml
+  - path: patches/arc/arc-runner-patch.yaml
+  - path: patches/arc/arc-runner-sa-patch.yaml
+  - path: patches/nexus/nexus-sc.yaml
+  - path: patches/nexus/nexus-pv.yaml
+  - path: patches/nexus/nexus-pvc.yaml
+transformers:
+  - ./transformers/name-suffix.yaml
+  - ./transformers/image-prefix.yaml
