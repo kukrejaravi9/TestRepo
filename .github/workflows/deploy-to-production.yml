@@ -41,8 +41,6 @@ jobs:
               echo "File $json_file does not exist."
               exit 1
           fi
-          az login --federated-token "$(cat $AZURE_FEDERATED_TOKEN_FILE)" --service-principal -u $AZURE_CLIENT_ID -t $AZURE_TENANT_ID
-          az account set -n ${{ vars.SUBSCRIPTION }}
           jq -c '.[]' "$json_file" | while read -r item; do
               {
                
