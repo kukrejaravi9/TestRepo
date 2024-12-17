@@ -23,5 +23,5 @@ jobs:
           latest_tag: "1.11.999"
         run: |
           latest_tag="1.11.999"
-          yq eval '(.images[] | select(.name == "ghcr.io/actions/gha-runner-scale-set-controller") | .newTag) =  env(latest_tag)' -i mynewfile.yml
+          yq eval '(.images[] | select(.name == "ghcr.io/actions/gha-runner-scale-set-controller") | .newTag) =  strenv(latest_tag)' -i mynewfile.yml
           
