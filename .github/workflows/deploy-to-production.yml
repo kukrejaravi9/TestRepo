@@ -24,7 +24,7 @@ jobs:
         run: |          
           echo "latest_tag=2.319.1" >> $GITHUB_ENV
           latest_tag="2.44.4"
-          #yq eval '(.images[] | select(.name == "ghcr.io/actions/gha-runner-scale-set-controller") | .newTag) =  env(latest_tag)' -i mynewfile.yml
-          yq eval "(.images[] | select(.name == "ghcr.io/actions/gha-runner-scale-set-controller") | .newTag) =  ${latest_tag}" -i mynewfile.yml
+          latest_tag=$latest_tag yq eval '(.images[] | select(.name == "ghcr.io/actions/gha-runner-scale-set-controller") | .newTag) =  env(latest_tag)' -i mynewfile.yml
+          #yq eval "(.images[] | select(.name == "ghcr.io/actions/gha-runner-scale-set-controller") | .newTag) =  ${latest_tag}" -i mynewfile.yml
           cat  mynewfile.yml
         shell: bash
