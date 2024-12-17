@@ -16,15 +16,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
-      - name: Set latest_tag variable
-        run: |
-          latest_tag="9.11.1"  # Set latest_tag variable here        
-      
+          
       - name: Set latest_tag variable 1
         id: my_id
         env: 
-          latest_tag: "44.4"
+          latest_tag: "44.66.6"
         run: |          
           yq eval '(.images[] | select(.name == "ghcr.io/actions/gha-runner-scale-set-controller") | .newTag) =  env(latest_tag)' -i mynewfile.yml
           cat  mynewfile.yml
