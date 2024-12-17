@@ -17,9 +17,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Get latest tag from ghcr.io
-        id: get-latest-tag
-
       - name: Set latest_tag variable
         run: |
           latest_tag="9.11.1"  # Set latest_tag variable here        
