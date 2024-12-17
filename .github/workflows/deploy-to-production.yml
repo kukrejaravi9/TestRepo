@@ -28,3 +28,52 @@ jobs:
           #yq eval "(.images[] | select(.name == "ghcr.io/actions/gha-runner-scale-set-controller") | .newTag) =  ${latest_tag}" -i mynewfile.yml
           cat  mynewfile.yml
         shell: bash
+
+      - name: Process images
+        id: process_images
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+         current_environment=${{ matrix.profile_environment  }}
+          json_file="mydata.json"
+          # Check if the JSON file exists
+          if [[ ! -f "$json_file" ]]; then
+              echo "File $json_file does not exist."
+              exit 1
+          fi
+          az login --federated-token "$(cat $AZURE_FEDERATED_TOKEN_FILE)" --service-principal -u $AZURE_CLIENT_ID -t $AZURE_TENANT_ID
+          az account set -n ${{ vars.SUBSCRIPTION }}
+          jq -c '.[]' "$json_file" | while read -r item; do
+              {
+               
+              latest_tag="4.44.444"
+              echo "$item" | jq -c '.applicable_environment_tag_change[]?' | while read -r change; do
+                env=$(echo "$change" | jq -r '.env')
+                echo "This is the env $env"
+                file_path=$(echo "$change" | jq -r '.file_path')
+                command=$(echo "$change" | jq -r '.command')
+                echo "This is the command : $command"
+                if [ "$current_environment" == "$env" ]; then
+                  echo "Applying tag change for environment: $env"
+                  eval "$command"
+                  cat $file_path
+                fi
+              done
+              } || {
+                  echo "An error occurred while processing: Error: $?"
+                  continue
+              }
+          done
+
+
+
+
+
+
+
+
+
+
+
+
+
