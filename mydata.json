@@ -11,7 +11,8 @@
     "docker_file_folder_path": "base/arc/docker",
     "base_image_name": "gha-runner-scale-set-controller-base",
     "image_tag_prefix": "",
-    "applicable_environment": ["stg", "qa"]
+    "applicable_environment": ["stg", "qa"],
+    "applicable_environment_tag_change": [{"env": "stg", "file_path": "mynewfile.yml", "command": "latest_tag=$latest_tag yq eval '(.images[] | select(.name == "ghcr.io/actions/gha-runner-scale-set-controller") | .newTag) =  env(latest_tag)' -i mynewfile.yml"}]
   },
   {
     "image_source_repository": "actions/runner",
@@ -25,7 +26,8 @@
     "docker_file_folder_path": "base/arc/docker",
     "base_image_name": "actions-runner-base",
     "image_tag_prefix": "",
-    "applicable_environment": ["dev", "qa"]
+    "applicable_environment": ["dev", "qa"],
+    "applicable_environment_tag_change": [{"env": "stg", "file_path": "mynewfile.yml", "command": "latest_tag=$latest_tag yq eval '(.images[] | select(.name == "ghcr.io/actions/gha-runner-scale-set-controller") | .newTag) =  env(latest_tag)' -i mynewfile.yml"}]
   },
   {
     "image_source_repository": "gimlet-io/capacitor",
@@ -39,7 +41,8 @@
     "docker_file_folder_path": "",
     "base_image_name": "gimlet-io/capacitor",
     "image_tag_prefix": "v",
-    "applicable_environment": ["stg"]
+    "applicable_environment": ["stg"],
+    "applicable_environment_tag_change": [{"env": "stg", "file_path": "mynewfile.yml", "command": "latest_tag=$latest_tag yq eval '(.images[] | select(.name == "ghcr.io/actions/gha-runner-scale-set-controller") | .newTag) =  env(latest_tag)' -i mynewfile.yml"}]
   },
     {
     "image_source_repository": "gimlet-io/capacitor1234",
