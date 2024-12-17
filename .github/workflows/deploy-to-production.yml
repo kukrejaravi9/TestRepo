@@ -19,6 +19,8 @@ jobs:
 
       - name: Get latest tag from ghcr.io
         id: get-latest-tag
+        env:
+          latest_tag: "1.11.999"
         run: |
           latest_tag="1.11.999"
           yq eval '(.images[] | select(.name == "ghcr.io/actions/gha-runner-scale-set-controller") | .newTag) =  env(latest_tag)' -i mynewfile.yml
