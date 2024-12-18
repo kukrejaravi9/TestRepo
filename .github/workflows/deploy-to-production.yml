@@ -16,7 +16,17 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-          
+  
+
+      - name: Set latest_tag variable 1
+        id: my_id_one
+        run: |
+          echo "changes_done=true" >> $GITHUB_OUTPUT    
+
+      - name: Set latest_tag variable 2        
+        run: |
+          echo "This is the value I am looking for ${{ steps.my_id_one.outputs.changes_done }}"           
+ 
       - name: Set latest_tag variable 1
         id: my_id
         #env: 
