@@ -1,91 +1,12 @@
 name: Get Latest Image Tag
 
 on:
-  push:
-    branches:
-      - main
+  schedule:
+    - cron: '1 * * * *'
 
 jobs:
   get-latest-tag:
-    strategy:
-          matrix:
-            profile_environment: ['stg', 'test', 'prod']
-          max-parallel: 1
-    environment: ${{ matrix.profile_environment }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
-  
-
-      - name: Set latest_tag variable 1
-        id: my_id_one
-        run: |
-          echo "changes_done=true" >> $GITHUB_OUTPUT    
-
-      - name: Set latest_tag variable 2        
-        run: |
-          echo "This is the value I am looking for ${{ steps.my_id_one.outputs.changes_done }}"   
-
-          if [ "${{ steps.my_id_one.outputs.changes_done }}" = "true" ]; then
-            echo "-------------------------Commiting code-----------------------------------------"    
-          fi              
- 
-      - name: Set latest_tag variable 1
-        id: my_id
-        #env: 
-          #latest_tag: "44.66.6"
-        run: |          
-          echo "latest_tag=2.319.1" >> $GITHUB_ENV
-          latest_tag="2.44.4"
-          latest_tag=$latest_tag yq eval '(.images[] | select(.name == "ghcr.io/actions/gha-runner-scale-set-controller") | .newTag) =  env(latest_tag)' -i mynewfile.yml
-          #yq eval "(.images[] | select(.name == "ghcr.io/actions/gha-runner-scale-set-controller") | .newTag) =  ${latest_tag}" -i mynewfile.yml
-          cat  mynewfile.yml
-        shell: bash
-
-      - name: Process images
-        id: process_images
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-         current_environment=${{ matrix.profile_environment  }}
-          json_file="mydata.json"
-          # Check if the JSON file exists
-          if [[ ! -f "$json_file" ]]; then
-              echo "File $json_file does not exist."
-              exit 1
-          fi
-          jq -c '.[]' "$json_file" | while read -r item; do
-              {
-               
-              latest_tag="4.44.444"
-              echo "$item" | jq -c '.applicable_environment_tag_change[]?' | while read -r change; do
-                env=$(echo "$change" | jq -r '.env')
-                echo "This is the env $env"
-                file_path=$(echo "$change" | jq -r '.file_path')
-                command=$(echo "$change" | jq -r '.command')
-                echo "This is the command : $command"
-                if [ "$current_environment" == "$env" ]; then
-                  echo "Applying tag change for environment: $env"
-                  eval "$command"
-                  cat $file_path
-                fi
-              done
-              } || {
-                  echo "An error occurred while processing: Error: $?"
-                  continue
-              }
-          done
-
-
-
-
-
-
-
-
-
-
-
-
-
+        run : echo "Hello"
