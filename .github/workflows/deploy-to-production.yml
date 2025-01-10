@@ -20,7 +20,9 @@ jobs:
     runs-on: ubuntu-latest      
     steps:
      
-      
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
+        
       - name: Delete current DEV branch
         run: |
           changes_done="false"
