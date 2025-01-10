@@ -1,5 +1,5 @@
-[
-  {
+[ 
+ {    
     "image_source_repository": "actions/actions-runner-controller",
     "tag_extractor_string": "gha-runner-scale-set-",
     "acr_image_name": "gha-runner-scale-set-controller",
@@ -11,10 +11,16 @@
     "docker_file_folder_path": "base/arc/docker",
     "base_image_name": "gha-runner-scale-set-controller-base",
     "image_tag_prefix": "",
-    "applicable_environment": ["stg", "qa"],
-    "applicable_environment_tag_change": [{"env": "stg", "file_path": "mynewfile.yml", "command": "latest_tag=$latest_tag yq eval '(.images[] | select(.name == \"ghcr.io/actions/gha-runner-scale-set-controller\") | .newTag) =  env(latest_tag)' -i mynewfile.yml"}]
-  },
-  {
+    "applicable_environment": ["stg"],    
+    "manifest_update_object": 
+      [
+        { 
+          "env": "stg", 
+          "file_path": "overlays/aks-acc-stg-1/kustomization.yaml", 
+          "command": "latest_source_tag=test.$latest_source_tag yq eval '(.images[] | select(.name == \"ghcr.io/actions/gha-runner-scale-set-controller\") | .newTag) =  env(latest_source_tag)' -i overlays/aks-acc-stg-1/kustomization.yaml"}
+      ]
+  },  
+  {    
     "image_source_repository": "actions/runner",
     "tag_extractor_string": "v",
     "acr_image_name": "actions-runner",
@@ -26,10 +32,17 @@
     "docker_file_folder_path": "base/arc/docker",
     "base_image_name": "actions-runner-base",
     "image_tag_prefix": "",
-    "applicable_environment": ["dev", "qa"],
-    "applicable_environment_tag_change": [{"env": "stg", "file_path": "mynewfile.yml", "command": "latest_tag=$latest_tag yq eval '(.images[] | select(.name == \"ghcr.io/actions/gha-runner-scale-set-controller\") | .newTag) =  env(latest_tag)' -i mynewfile.yml"}]
+    "applicable_environment": ["stg"],
+    "manifest_update_object": 
+      [
+        {
+          "env": "stg", 
+          "file_path": "overlays/aks-acc-stg-1/patches/arc/arc-runner-patch.yaml", 
+          "command": "latest_source_tag=test.$latest_source_tag yq eval '(.spec.template.spec.containers[] | select(.image == \"accakscntrregstg.azurecr.us/actions-runner:*\") | .image) |= \"accakscntrregstg.azurecr.us/actions-runner:\" + env(latest_source_tag)' -i overlays/aks-acc-stg-1/patches/arc/arc-runner-patch.yaml"
+        }
+      ]    
   },
-  {
+ {    
     "image_source_repository": "gimlet-io/capacitor",
     "tag_extractor_string": "v",
     "acr_image_name": "gimlet-io/capacitor",
@@ -41,21 +54,102 @@
     "docker_file_folder_path": "",
     "base_image_name": "gimlet-io/capacitor",
     "image_tag_prefix": "v",
-    "applicable_environment": ["stg"],
-    "applicable_environment_tag_change": [{"env": "stg", "file_path": "mynewfile.yml", "command": "latest_tag=$latest_tag yq eval '(.images[] | select(.name == \"ghcr.io/actions/gha-runner-scale-set-controller\") | .newTag) =  env(latest_tag)' -i mynewfile.yml"}]
+    "applicable_environment": ["stg", "dev", "qa", "prd"],
+    "manifest_update_object": 
+      [
+        {
+          "env": "stg", 
+          "file_path": "overlays/aks-acc-stg-1/kustomization.yaml", 
+          "command": "latest_source_tag=test.$latest_source_tag yq eval '(.images[] | select(.name == \"ghcr.io/gimlet-io/capacitor\") | .newTag) =  env(latest_source_tag)' -i overlays/aks-acc-stg-1/kustomization.yaml"
+        }, 
+        {
+          "env": "dev", 
+          "file_path": "overlays/aks-acc-dev-1/kustomization.yaml", 
+          "command": "latest_source_tag=test.$latest_source_tag yq eval '(.images[] | select(.name == \"ghcr.io/gimlet-io/capacitor\") | .newTag) =  env(latest_source_tag)' -i overlays/aks-acc-dev-1/kustomization.yaml"
+        },
+        {
+          "env": "qa", 
+          "file_path": "overlays/aks-acc-qa-1/kustomization.yaml", 
+          "command": "latest_source_tag=test.$latest_source_tag yq eval '(.images[] | select(.name == \"ghcr.io/gimlet-io/capacitor\") | .newTag) =  env(latest_source_tag)' -i overlays/aks-acc-qa-1/kustomization.yaml"
+        }
+      ]
   },
-  {
-    "image_source_repository": "gimlet-io/capacitor1234",
+  {    
+    "image_source_repository": "kubernetes/ingress-nginx",
     "tag_extractor_string": "v",
-    "acr_image_name": "gimlet-io/capacitor1234",
+    "acr_image_name": "ingress-nginx/controller",
     "is_docker_image": "0",
     "docker_file_path": "",
     "docker_substitution_source": "",
     "docker_substitution_target": "",
-    "acr_base_image_import_source": "ghcr.io/gimlet-io/capacitor",
+    "acr_base_image_import_source": "registry.k8s.io/ingress-nginx/controller",
     "docker_file_folder_path": "",
-    "base_image_name": "gimlet-io/capacitor",
+    "base_image_name": "ingress-nginx/controller",
     "image_tag_prefix": "v",
-    "applicable_environment": ["dev"]
-  }
+    "applicable_environment": ["stg", "dev", "prd", "qa"],
+    "manifest_update_object": 
+      [
+        {
+          "env": "stg", 
+          "file_path": "overlays/aks-acc-stg-1/kustomization.yaml", 
+          "command": "latest_source_tag=test.$latest_source_tag yq eval '(.images[] | select(.name == \"registry.k8s.io/ingress-nginx/controller\") | .newTag) =  env(latest_source_tag)' -i overlays/aks-acc-stg-1/kustomization.yaml"
+        }, 
+        {
+          "env": "dev", 
+          "file_path": "overlays/aks-acc-dev-1/kustomization.yaml", 
+          "command": "latest_source_tag=test.$latest_source_tag yq eval '(.images[] | select(.name == \"registry.k8s.io/ingress-nginx/controller\") | .newTag) =  env(latest_source_tag)' -i overlays/aks-acc-dev-1/kustomization.yaml"
+        },
+        {
+          "env": "qa", 
+          "file_path": "overlays/aks-acc-qa-1/kustomization.yaml", 
+          "command": "latest_source_tag=test.$latest_source_tag yq eval '(.images[] | select(.name == \"registry.k8s.io/ingress-nginx/controller\") | .newTag) =  env(latest_source_tag)' -i overlays/aks-acc-qa-1/kustomization.yaml"
+        }
+      ]
+  },
+  {    
+    "image_source_repository": "kubernetes/ingress-nginx",
+    "tag_extractor_string": "v",
+    "acr_image_name": "ingress-nginx/kube-webhook-certgen",
+    "is_docker_image": "0",
+    "docker_file_path": "",
+    "docker_substitution_source": "",
+    "docker_substitution_target": "",
+    "acr_base_image_import_source": "registry.k8s.io/ingress-nginx/kube-webhook-certgen",
+    "docker_file_folder_path": "",
+    "base_image_name": "ingress-nginx/kube-webhook-certgen",
+    "image_tag_prefix": "v",
+    "applicable_environment": ["stg", "dev", "prd", "qa"]    
+  },
+    {    
+    "image_source_repository": "external-secrets/external-secrets",
+    "tag_extractor_string": "helm-chart-",
+    "acr_image_name": "external-secrets",
+    "is_docker_image": "0",
+    "docker_file_path": "",
+    "docker_substitution_source": "",
+    "docker_substitution_target": "",
+    "acr_base_image_import_source": "ghcr.io/external-secrets/external-secrets",
+    "docker_file_folder_path": "",
+    "base_image_name": "external-secrets",
+    "image_tag_prefix": "v",
+    "applicable_environment": ["stg", "dev", "prd", "qa"],
+    "manifest_update_object": 
+      [
+        {
+          "env": "stg", 
+          "file_path": "overlays/aks-acc-stg-1/kustomization.yaml", 
+          "command": "latest_source_tag=test.$latest_source_tag yq eval '(.images[] | select(.name == \"ghcr.io/external-secrets/external-secrets\") | .newTag) =  env(latest_source_tag)' -i overlays/aks-acc-stg-1/kustomization.yaml"
+        }, 
+        {
+          "env": "dev", 
+          "file_path": "overlays/aks-acc-dev-1/kustomization.yaml", 
+          "command": "latest_source_tag=test.$latest_source_tag yq eval '(.images[] | select(.name == \"ghcr.io/external-secrets/external-secrets\") | .newTag) =  env(latest_source_tag)' -i overlays/aks-acc-dev-1/kustomization.yaml"
+        },
+        {
+          "env": "qa", 
+          "file_path": "overlays/aks-acc-qa-1/kustomization.yaml", 
+          "command": "latest_source_tag=test.$latest_source_tag yq eval '(.images[] | select(.name == \"ghcr.io/external-secrets/external-secrets\") | .newTag) =  env(latest_source_tag)' -i overlays/aks-acc-qa-1/kustomization.yaml"
+        }
+      ]
+  }     
 ]
