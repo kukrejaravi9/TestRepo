@@ -38,11 +38,12 @@ jobs:
           process_item() {
               local item=$1
               image_source_repository=$(echo "$item" | jq -r '.image_source_repository')
-              echo "Hello Item: $item"
+              echo "-------------Hello Item: $item -------------"
+              echo "-------Hello Segregator: $image_source_repository -------------"
           }
            if [ ${{ inputs.force_image_build }} == 'true' ]; then
               item=$(jq -c --arg name "$force_image_name" '.[] | select(.acr_image_name == $name)' "$json_file")
-              echo "This is the initial item: $item"
+              echo "-------------This is the initial item: $item -------------"
               if [[ -n "$item" ]]; then
                   process_item "$item"
               else
