@@ -1,12 +1,22 @@
-name: Get Latest Image Tag
-
-on:
-  schedule:
-    - cron: '1 * * * *'
+name: Deploy 
+on: 
+  workflow_dispatch:
+    inputs:
+      nx-Apps:
+        required: false
+        type: choice
+        description: Select the App
+        options:
+          - 'nx-id'
+          - 'nx-ole'
+          - 'nx-jlg'
 
 jobs:
-  get-latest-tag:
-    runs-on: ubuntu-latest
+  delete-and-create-dev-branch:
+    runs-on: ubuntu-latest      
     steps:
-      - name: Checkout repository
-        run : echo "Hello"
+     
+      
+      - name: Delete current DEV branch
+        run: |
+          echo "Hello ${{ inputs.nx-Apps }}"
