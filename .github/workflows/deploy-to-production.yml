@@ -10,6 +10,11 @@ on:
           - 'nx-id'
           - 'nx-ole'
           - 'nx-jlg'
+      recompile:
+        required: true
+        type: boolean
+        description: Trigger full recompile (copies ./App_Code)
+        default: false
 
 jobs:
   delete-and-create-dev-branch:
@@ -19,4 +24,7 @@ jobs:
       
       - name: Delete current DEV branch
         run: |
-          echo "Hello ${{ inputs.nx-Apps }}"
+         if [ ${{ inputs.recompile }} == 'true' ]; then
+           echo "Hello ${{ inputs.nx-Apps }}"
+         fi
+          
