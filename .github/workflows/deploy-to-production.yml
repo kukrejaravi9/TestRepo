@@ -26,5 +26,7 @@ jobs:
         run: |
          if [ ${{ inputs.recompile }} == 'true' ]; then
            echo "Hello ${{ inputs.nx-Apps }}"
+         else
+           echo "Hello World"
          fi
           
