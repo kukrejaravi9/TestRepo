@@ -18,43 +18,7 @@ on:
 jobs:
   delete-and-create-dev-branch:
     runs-on: ubuntu-latest      
-    steps:
-     
-      - name: Checkout
-        uses: actions/checkout@v4.2.2
-        
+    steps:        
       - name: Delete current DEV branch
         run: |
-          changes_done="false"
-          current_environment='dev'
-          force_image_name=${{ inputs.image_name }}
-          json_file="mydata.json"
-          # Check if the JSON file exists
-          if [[ ! -f "$json_file" ]]; then
-              echo "File $json_file does not exist."
-              exit 1
-          fi
-
-          process_item() {
-              local item=$1
-              image_source_repository=$(echo "$item" | jq -r '.image_source_repository')
-              echo "-------------Hello Item: $item -------------"
-              echo "-------Hello Segregator: $image_source_repository -------------"
-          }
-           if [ ${{ inputs.force_image_build }} == 'true' ]; then
-              item=$(jq -c --arg name "$force_image_name" '.[] | select(.acr_image_name == $name)' "$json_file")
-              echo "-------------This is the initial item: $item -------------"
-              if [[ -n "$item" ]]; then
-                  process_item "$item"
-              else
-                  echo "No matching item found for force_image_name: $force_image_name"
-              fi             
-           else
-              jq -c '.[]' "$json_file" | while read -r item; do
-                  process_item "$item" || {
-                      echo "An error occurred while processing: Error: $?"
-                      continue
-                  }
-              done         
-           fi 
-          
+          curl -I https://api.nuget.org/v3/index.json
