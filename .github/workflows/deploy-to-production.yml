@@ -8,15 +8,39 @@ on:
 jobs:
   build:
     if: github.event.action != 'closed'
-    runs-on: ubuntu-latest      
+    runs-on: ubuntu-latest
+    strategy:
+          matrix:
+            profile_environment: ['dev', 'qa', 'prd']
+          max-parallel: 1
+    environment: ${{ matrix.profile_environment }}      
     steps:        
       - name: Build
         run: |
           echo "build"
 
+  approve:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+          matrix:
+            profile_environment: ['dev', 'qa', 'prd']
+          max-parallel: 1
+    environment: ${{ matrix.profile_environment }}      
+    steps:        
+      - name: Build
+        run: |
+          echo "build"
+          
   publish:
+    needs: approve
     if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest      
+    runs-on: ubuntu-latest
+    strategy:
+          matrix:
+            profile_environment: ['dev', 'qa', 'prd']
+          max-parallel: 1
+    environment: ${{ matrix.profile_environment }}
     steps:        
       - name: Publish
         run: |
