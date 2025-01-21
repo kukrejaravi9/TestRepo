@@ -3,7 +3,7 @@ on:
   pull_request:
     branches:
       - main  
-    types: [opened, reopened]
+    types: [opened, reopened, synchronize]
 
 jobs:
   delete-and-create-dev-branch:
