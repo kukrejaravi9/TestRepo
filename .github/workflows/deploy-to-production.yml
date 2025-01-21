@@ -6,9 +6,18 @@ on:
     types: [opened, reopened, synchronize, closed]
 
 jobs:
-  delete-and-create-dev-branch:
+  build:
+    if: github.event.action != 'closed'
     runs-on: ubuntu-latest      
     steps:        
-      - name: Delete current DEV branch
+      - name: Build
         run: |
-          echo "Hello World"
+          echo "build"
+
+  publish:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest      
+    steps:        
+      - name: Publish
+        run: |
+          echo "Publish"
