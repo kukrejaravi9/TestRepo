@@ -1,19 +1,9 @@
 name: Deploy 
-on: 
-  workflow_dispatch:
-    inputs:
-      image_name:
-        required: false
-        type: choice
-        description: Select the App
-        options:
-          - 'gha-runner-scale-set-controller'
-          - 'actions-runner'
-      force_image_build:
-        required: true
-        type: boolean
-        description: Trigger full recompile (copies ./App_Code)
-        default: false
+on:
+  pull_request:
+    branches:
+      - main  
+    types: [opened, reopened]
 
 jobs:
   delete-and-create-dev-branch:
@@ -21,4 +11,4 @@ jobs:
     steps:        
       - name: Delete current DEV branch
         run: |
-          curl -I https://api.nuget.org/v3/index.json
+          echo "Hello World"
