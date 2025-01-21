@@ -17,32 +17,14 @@ jobs:
     steps:        
       - name: Build
         run: |
-          echo "build"
-
-  approve:
-    needs: build
+          echo "build"          
+  
+  publish:    
     if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
     strategy:
           matrix:
             profile_environment: ['dev', 'qa', 'prd']
           max-parallel: 1
-    environment: ${{ matrix.profile_environment }}      
-    steps:        
-      - name: Build
-        run: |
-          echo "build"
-          
-  publish:
-    needs: approve
-    if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
-    strategy:
-          matrix:
-            profile_environment: ['dev', 'qa', 'prd']
-          max-parallel: 1
-    environment: ${{ matrix.profile_environment }}
-    steps:        
-      - name: Publish
-        run: |
-          echo "Publish"
+    uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
+    with:
+      environment: ${{ matrix.profile_environment }}       
