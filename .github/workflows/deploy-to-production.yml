@@ -11,8 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
           matrix:
-            profile_environment: ['dev', 'qa', 'prd']
-          max-parallel: 1
+            profile_environment: ['dev', 'qa', 'prd']          
     environment: ${{ matrix.profile_environment }}      
     steps:        
       - name: Build
@@ -21,14 +20,9 @@ jobs:
   
   publish:    
     if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
     strategy:
           matrix:
-            profile_environment: ['dev', 'qa', 'prd']
-          max-parallel: 1
-    steps:
-      - name: Call reusable workflow
-        uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
-        with:
-          environment: ${{ matrix.profile_environment }}
-        continue-on-error: true   
+            profile_environment: ['dev', 'qa', 'prd']          
+    uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
+    with:
+      environment: ${{ matrix.profile_environment }}       
