@@ -1,10 +1,5 @@
-name: Deploy to server
+name: Publish
 on: 
-  workflow_dispatch:
-    inputs:
-      environment:      
-        type: string
-        required: false
 
   workflow_call:
     inputs:
@@ -13,12 +8,23 @@ on:
         required: false
     
 jobs: 
-  reusable-job:
+  wait_for_approval:    
+    runs-on: ubuntu-latest      
+    environment: approve 
+    steps:
+    - name: Approval
+      id: set-output
+      run: |
+        echo 'Aproval'        
+    
+  publish:
+    needs: [wait_for_approval]
     runs-on: ubuntu-latest
-    steps:      
-      - name: echo input
-        id: test-step
-        run: echo ${{ inputs.environment }}
+    steps:
+    - name: Publish
+      id: set-output
+      run: |
+        echo 'Publish' 
     
     
   
