@@ -1,30 +1,18 @@
-name: Publish
+name: Publish schema changes
 on: 
-
   workflow_call:
     inputs:
       environment:      
         type: string
-        required: false
-    
-jobs: 
-  wait_for_approval:    
-    runs-on: ubuntu-latest      
-    environment: approve 
-    steps:
-    - name: Approval
-      id: set-output
-      run: |
-        echo 'Aproval'        
-    
-  publish:
-    needs: [wait_for_approval]
-    runs-on: ubuntu-latest
+        required: false    
+jobs:        
+  publish_changes:
+    runs-on: cloud-runners-ads
     environment: ${{ inputs.environment }}
     steps:
-    - name: Publish
-      id: set-output
+    - name: Checkout
+      uses: actions/checkout@v4.2.2   
+        
+    - name: Publish schema changes
       run: |
-        echo 'Publish'
-    
-  
+        echo "Hello World"
