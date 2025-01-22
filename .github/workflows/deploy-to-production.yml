@@ -1,39 +1,58 @@
-name: Deploy 
+name: Schema update automation
+
 on:
   pull_request:
     branches:
-      - main  
+      - main
     types: [opened, reopened, synchronize, closed]
-
+    
 jobs:
-  build:
+  generate_delta_script:
     if: github.event.action != 'closed'
-    runs-on: ubuntu-latest
-    strategy:
-          matrix:
-            profile_environment: ['dev', 'qa', 'prd']          
-    environment: ${{ matrix.profile_environment }}      
-    steps:        
-      - name: Build
+    runs-on: cloud-runners-ads
+    permissions:
+      id-token: write
+      contents: write
+      actions: read
+    environment: dev
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
+        
+      - name: Generate delta script
         run: |
-          echo "build"          
+          echo "${{ vars.DB_SERVER }}"
+          echo "Hello World" >schema-changes.sql
+
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v4.6.0
+        with:
+          name: delta-script
+          path: schema-changes.sql       
+
+  publish_stg:    
+      if: github.event.pull_request.merged == true
+      uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
+      with:
+        environment: approval-dev
   
-  publish_dev:    
-    if: github.event.pull_request.merged == true
+  publish_dev:
+    needs: publish_stg
+    if: github.event.pull_request.merged == true && always()
     uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
     with:
-      environment: dev
+      environment: approval-dev      
 
   publish_qa:
     needs: publish_dev
     if: github.event.pull_request.merged == true && always()
-    uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
+    uses: Access-Segment/Access-DB/.github/workflows/reusable-deploy-to-server.yml@main
     with:
-      environment: qa      
+      environment: approval-dev
 
-  publish_prod:
+  publish_prd:
     needs: publish_qa
     if: github.event.pull_request.merged == true && always()
-    uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
+    uses: Access-Segment/Access-DB/.github/workflows/reusable-deploy-to-server.yml@main
     with:
-      environment: prd      
+      environment: approval-dev
