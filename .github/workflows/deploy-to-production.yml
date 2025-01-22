@@ -36,8 +36,8 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             echo "${{ steps.upload-artifact.outputs.artifact-url }}"
-            const artifactUrl = `https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts`;
-            const commentBody = `The generated file [schema-changes.sql](${{ steps.upload-artifact.outputs.artifact-url }}) is available as an artifact.`;
+            const artifactUrl = `${{ steps.upload-artifact.outputs.artifact-url }}`;
+            const commentBody = `The generated file [schema-changes.sql](${artifactUrl}) is available as an artifact.`;
             github.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
