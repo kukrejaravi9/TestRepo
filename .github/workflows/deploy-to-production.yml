@@ -25,6 +25,7 @@ jobs:
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4.6.0
+        id: upload-artifact
         with:
           name: delta-script-${{ matrix.environment }}
           path: schema-changes.sql
@@ -34,8 +35,9 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            echo "${{ steps.upload-artifact.outputs.artifact-url }}"
             const artifactUrl = `https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts`;
-            const commentBody = `The generated file [schema-changes.sql](${artifactUrl}) is available as an artifact.`;
+            const commentBody = `The generated file [schema-changes.sql](${{ steps.upload-artifact.outputs.artifact-url }}) is available as an artifact.`;
             github.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
