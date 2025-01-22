@@ -41,13 +41,13 @@ jobs:
   publish_qa:
     needs: publish_dev
     if: github.event.pull_request.merged == true && always()
-    uses: Access-Segment/Access-DB/.github/workflows/reusable-deploy-to-server.yml@main
+    uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
     with:
       environment: approval-dev
 
   publish_prd:
     needs: publish_qa
     if: github.event.pull_request.merged == true && always()
-    uses: Access-Segment/Access-DB/.github/workflows/reusable-deploy-to-server.yml@main
+    uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
     with:
       environment: approval-dev
