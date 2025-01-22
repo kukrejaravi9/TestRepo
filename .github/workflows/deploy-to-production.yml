@@ -1,4 +1,4 @@
-name: Schema update automation
+name: Schema update
 
 on:
   pull_request:
@@ -8,6 +8,9 @@ on:
     
 jobs:
   generate_delta_script:
+    strategy:
+      matrix:
+        environment: ['dev', 'qa', 'prod']  
     if: github.event.action != 'closed'
     runs-on: ubuntu-latest
     steps:
