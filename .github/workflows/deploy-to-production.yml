@@ -18,12 +18,22 @@ jobs:
         run: |
           echo "build"          
   
-  publish:    
+  publish_dev:    
     if: github.event.pull_request.merged == true
-    strategy:
-          matrix:
-            profile_environment: ['dev', 'qa', 'prd']
-          max-parallel: 1
     uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
     with:
-      environment: ${{ matrix.profile_environment }}       
+      environment: dev
+
+  publish_qa:
+    needs: publish_dev
+    if: github.event.pull_request.merged == true
+    uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
+    with:
+      environment: qa      
+
+  publish_prod:
+    needs: publish_qa
+    if: github.event.pull_request.merged == true
+    uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
+    with:
+      environment: prd      
