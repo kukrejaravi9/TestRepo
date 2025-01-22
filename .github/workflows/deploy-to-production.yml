@@ -26,14 +26,14 @@ jobs:
 
   publish_qa:
     needs: publish_dev
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true && always()
     uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
     with:
       environment: qa      
 
   publish_prod:
     needs: publish_qa
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true && always()
     uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
     with:
       environment: prd      
