@@ -34,8 +34,7 @@ jobs:
         uses: actions/github-script@v4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            echo "${{ steps.upload-artifact.outputs.artifact-url }}"
+          script: |           
             const artifactUrl = `${{ steps.upload-artifact.outputs.artifact-url }}`;
             const commentBody = `The generated file [schema-changes.sql](${artifactUrl}) is available as an artifact.`;
             github.issues.createComment({
