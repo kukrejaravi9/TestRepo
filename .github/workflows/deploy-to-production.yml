@@ -1,4 +1,4 @@
-name: Schema update
+name: Schema update automation
 
 on:
   pull_request:
