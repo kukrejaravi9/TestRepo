@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: ${{ github.workflow }}
+  group: schema_update_automation
   cancel-in-progress: true  
     
 jobs:
