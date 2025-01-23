@@ -30,18 +30,19 @@ jobs:
           name: delta-script-${{ matrix.environment }}
           path: schema-changes.sql
 
-      - name: Add comment to PR
-        env:
-          URL: ${{ github.event.issue.comments_url }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo $URL
-          curl \
-            -X POST \
-            $URL \
-            -H "Content-Type: application/json" \
-            -H "Authorization: token $GITHUB_TOKEN" \
-            --data '{ "body": "blah blah" }' 
+      - name: Post artifact link as comment
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const artifactUrl = `https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts`;
+            const commentBody = `The generated file [schema-changes.sql](${artifactUrl}) is available as an artifact.`;
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: commentBody
+            });
 
   publish_stg:    
       if: github.event.pull_request.merged == true
