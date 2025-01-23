@@ -6,6 +6,10 @@ on:
       - main
     types: [opened, reopened, synchronize, closed]
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true  
     
 jobs:
   generate_delta_script:
