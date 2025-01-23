@@ -33,6 +33,7 @@ jobs:
           echo "Hello World" >schema-changes.sql
 
           echo "${{ github.event_name }}"
+          cat hello.txt
           
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4.6.0
