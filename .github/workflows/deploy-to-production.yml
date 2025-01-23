@@ -35,8 +35,8 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const artifactUrl = `https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts`;
-            const commentBody = `The generated file [schema-changes.sql](${artifactUrl}) is available as an artifact.`;
+            const artifactUrl = `${{ steps.upload-artifact.outputs.artifact-url }}`;
+            const commentBody = `The delta script for environment ${{ matrix.environment }}: [schema-changes.sql](${artifactUrl}).`;
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
