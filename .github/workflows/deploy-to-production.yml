@@ -63,7 +63,7 @@ jobs:
       with:
         environment: approval-dev
       concurrency:
-        group: ${{ github.workflow }}
+        group: ${{ github.workflow }}-publish
         cancel-in-progress: true          
   
   publish_dev:
@@ -73,7 +73,7 @@ jobs:
     with:
       environment: approval-dev
     concurrency:
-      group: ${{ github.workflow }}
+      group: ${{ github.workflow }}-publish
       cancel-in-progress: true        
 
   publish_qa:
@@ -83,7 +83,7 @@ jobs:
     with:
       environment: approval-dev
     concurrency:
-      group: ${{ github.workflow }}
+      group: ${{ github.workflow }}-publish
       cancel-in-progress: true        
 
   publish_prd:
@@ -93,5 +93,5 @@ jobs:
     with:
       environment: approval-dev
     concurrency:
-      group: ${{ github.workflow }}
+      group: ${{ github.workflow }}-publish
       cancel-in-progress: true        
