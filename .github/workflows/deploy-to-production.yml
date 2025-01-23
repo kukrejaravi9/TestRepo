@@ -48,29 +48,30 @@ jobs:
               body: commentBody
             });
 
-  publish_stg:    
-      if: github.event.pull_request.merged == true
+  publish_stg:
+      needs: generate_delta_script
+      if: (github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch') && always()
       uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
       with:
         environment: approval-dev
   
   publish_dev:
     needs: publish_stg
-    if: github.event.pull_request.merged == true && always()
+    if: (github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch') && always()
     uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
     with:
       environment: approval-dev      
 
   publish_qa:
     needs: publish_dev
-    if: github.event.pull_request.merged == true && always()
+    if: (github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch') && always()
     uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
     with:
       environment: approval-dev
 
   publish_prd:
     needs: publish_qa
-    if: github.event.pull_request.merged == true && always()
+    if: (github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch') && always()
     uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
     with:
       environment: approval-dev
