@@ -61,7 +61,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        environment: ['approval-dev', 'approval-qa', 'approval-prd']
+        environment: ['approval-dev', 'approval-qa']
     continue-on-error: true      
     if: (github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch')    
     runs-on: ubuntu-latest
