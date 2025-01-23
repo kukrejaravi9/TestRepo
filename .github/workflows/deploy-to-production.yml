@@ -5,13 +5,14 @@ on:
     branches:
       - main
     types: [opened, reopened, synchronize, closed]
+  workflow_dispatch:
     
 jobs:
   generate_delta_script:
     strategy:
       matrix:
         environment: ['dev', 'qa', 'prod']  
-    if: github.event.action != 'closed'
+    if: github.event.action != 'closed' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     environment: ${{ matrix.environment }}
     steps:
@@ -31,6 +32,7 @@ jobs:
           path: schema-changes.sql
 
       - name: Post artifact link as comment
+        if: github.event.action != 'closed'
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
