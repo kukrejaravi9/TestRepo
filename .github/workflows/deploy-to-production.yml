@@ -30,19 +30,16 @@ jobs:
           name: delta-script-${{ matrix.environment }}
           path: schema-changes.sql
 
-      - name: Post artifact link as comment
-        uses: actions/github-script@v4
+      - uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |           
-            const artifactUrl = `${{ steps.upload-artifact.outputs.artifact-url }}`;
-            const commentBody = `The generated file [schema-changes.sql](${artifactUrl}) is available as an artifact.`;
-            github.issues.createComment({
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: '👋 Thanks for reporting!'
-            });          
+            })        
 
   publish_stg:    
       if: github.event.pull_request.merged == true
