@@ -7,7 +7,7 @@ on:
         required: false
 
 concurrency:
-  group: schema_update_automation
+  group: ${{ github.workflow }}
   cancel-in-progress: true
   
 jobs:        
