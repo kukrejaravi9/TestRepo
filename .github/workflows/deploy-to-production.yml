@@ -15,7 +15,8 @@ jobs:
   generate_delta_script:
     strategy:
       matrix:
-        environment: ['dev', 'qa', 'prod']  
+        environment: ['dev', 'qa', 'prod']
+    continue-on-error: true
     if: (github.event_name == 'pull_request' && github.event.action != 'closed') || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     environment: ${{ matrix.environment }}
