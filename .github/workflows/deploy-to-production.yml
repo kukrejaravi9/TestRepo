@@ -21,6 +21,9 @@ jobs:
         
       - name: Generate delta script
         run: |
+          if [[ ${{ matrix.environment }} == 'dev' ]]; then
+            exit 1
+          fi
           echo "${{ vars.DB_SERVER }}"
           echo "Hello World" >schema-changes.sql
 
