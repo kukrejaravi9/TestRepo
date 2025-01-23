@@ -4,7 +4,12 @@ on:
     inputs:
       environment:      
         type: string
-        required: false    
+        required: false
+
+concurrency:
+  group: schema_update_automation
+  cancel-in-progress: true
+  
 jobs:        
   publish_changes:
     runs-on: ubuntu-latest
