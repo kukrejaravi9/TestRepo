@@ -35,6 +35,7 @@ jobs:
           URL: ${{ github.event.issue.comments_url }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          echo $URL
           curl \
             -X POST \
             $URL \
