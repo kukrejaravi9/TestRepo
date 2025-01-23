@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: schema_update_automation
+  group: ${{ github.workflow }}
   cancel-in-progress: true  
     
 jobs:
@@ -62,13 +62,19 @@ jobs:
       uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
       with:
         environment: approval-dev
+      concurrency:
+        group: ${{ github.workflow }}
+        cancel-in-progress: true          
   
   publish_dev:
     needs: publish_stg
     if: (github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch') && always()
     uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
     with:
-      environment: approval-dev      
+      environment: approval-dev
+    concurrency:
+      group: ${{ github.workflow }}
+      cancel-in-progress: true        
 
   publish_qa:
     needs: publish_dev
@@ -76,6 +82,9 @@ jobs:
     uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
     with:
       environment: approval-dev
+    concurrency:
+      group: ${{ github.workflow }}
+      cancel-in-progress: true        
 
   publish_prd:
     needs: publish_qa
@@ -83,3 +92,6 @@ jobs:
     uses: kukrejaravi9/TestRepo/.github/workflows/reusable-deploy-to-server.yml@main
     with:
       environment: approval-dev
+    concurrency:
+      group: ${{ github.workflow }}
+      cancel-in-progress: true        
