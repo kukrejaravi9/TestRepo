@@ -24,7 +24,7 @@ jobs:
           git config --global user.email github-actions@github.com
           git config --global user.name github-actions
           git pull
-          echo "hello world" >> hello.txt
+          echo "hello world ${{ github.run_id }}" >> hello.txt
 
       - name: Commit changes
         run: |          
@@ -34,6 +34,16 @@ jobs:
             if [ "${{ github.ref }}" = "refs/heads/main" ]; then
               git checkout -b update-manifest-${{ github.run_id }}
               git push origin update-manifest-${{ github.run_id }}
+
+              curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Accept: application/vnd.github.v3+json" \
+              https://api.github.com/repos/${{ github.repository }}/pulls \
+              -d '{
+                "title": "Update manifest from workflow run: ${{ github.run_id }}",
+                "body": "This PRis created by workflow: Image updated automation. The runid is: ${{ github.run_id }}",
+                "head": "update-manifest-${{ github.run_id }}",
+                "base": "main"
+              }'              
             else
               git push
             fi 
