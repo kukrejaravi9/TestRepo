@@ -41,7 +41,7 @@ jobs:
               https://api.github.com/repos/${{ github.repository }}/pulls \
               -d '{
                 "title": "Update manifest from workflow run: ${{ github.run_id }}",
-                "body": "This PR is created by workflow: Image updated automation. See the [GitHub Actions run](${{ github.run_url }}) for more details.",
+                "body": "This PR is created by workflow: Image updated automation. See the [GitHub Actions run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) for more details.",
                 "head": "update-manifest-${{ github.run_id }}",
                 "base": "main"
               }'              
