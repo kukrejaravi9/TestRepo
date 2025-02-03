@@ -64,7 +64,7 @@ jobs:
       matrix:
         environment: ['approval-dev', 'approval-qa']
     continue-on-error: true      
-    if: (github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch')    
+    if: (github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch') && always()
     runs-on: ubuntu-latest
     environment: ${{ matrix.environment }}
     steps:
