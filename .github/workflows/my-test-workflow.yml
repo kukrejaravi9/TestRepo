@@ -161,7 +161,7 @@ jobs:
         run: |
           if [ "${{ steps.process_images.outputs.changes_done }}" = "true" ]; then
             echo "-------------------------Commiting code-----------------------------------------"
-            git add .
+            #git add .
             git commit -m "Updated manifest"
             if [ "${{ github.ref }}" = "refs/heads/main" ]; then
               git checkout -b update-manifest-${{ github.run_id }}
