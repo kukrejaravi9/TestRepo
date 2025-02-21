@@ -89,7 +89,7 @@ jobs:
               latest_source_tag=$(gh release list --exclude-drafts --exclude-pre-releases --limit 1 -R $image_source_repository | grep -oP "(?<=$tag_extractor_string)[0-9.]+" | head -1)
               echo "Latest source tag: $latest_source_tag"
               
-              current_acr_tag=2.321.0
+              current_acr_tag=2.322.0
               echo "Current ACR tag: $current_acr_tag"
               current_acr_tag=$(echo "$current_acr_tag" | sed -e 's/^//' -e 's/^v//')
               echo "Current ACR tag post substitution: $current_acr_tag"
