@@ -1,4 +1,4 @@
-FROM ghcr.io/actions/actions-runner:2.321.0 AS base
+FROM accakscntrregstg.azurecr.us/actions-runner-base:2.322.0 AS base
 COPY openssl.cnf /etc/ssl/openssl.cnf
 COPY settings.xml /home/runner/.m2/settings.xml
 RUN sudo chown -R runner:runner .m2
