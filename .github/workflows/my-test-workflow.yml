@@ -104,7 +104,7 @@ jobs:
                   fi
                   
                   
-                  tag_exists=$(az acr repository show-tags --name ${{ vars.ACR_NAME }} --repository $base_image_name --query "contains(@, '${image_tag_prefix}${latest_source_tag}')" --output tsv)
+                  tag_exists=false
                   echo "Tag exists check: $tag_exists"
                   
                   if [ "$tag_exists" != "true" ] || [ ${{ inputs.force_image_build }} == 'true' ]; then
