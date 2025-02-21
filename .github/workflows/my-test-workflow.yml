@@ -129,7 +129,7 @@ jobs:
                           echo "Applying tag change for environment: $env"
                           eval "$command"
                           cat $file_path
-                          if [ -n "$(git status --porcelain)" ]; then
+                          if [ -n "$(git diff  $file_path)" ]; then
                               git add $file_path
                               echo "changes_done=true" >> $GITHUB_OUTPUT
                           fi
