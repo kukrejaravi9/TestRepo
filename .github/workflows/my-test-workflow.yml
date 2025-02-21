@@ -1,16 +1,38 @@
-name: My Test
+name: Image update automation
 
 on:
   workflow_dispatch:
+    inputs:
+      force_image_build:
+        required: true
+        type: boolean
+        description: Force image build
+        default: false
+      image:
+        required: false
+        type: choice
+        description: Select the image to build
+        options:
+          - 'gha-runner-scale-set-controller'
+          - 'actions-runner'
+          - 'gimlet-io/capacitor'
+          - 'ingress-nginx/controller'
+          - 'ingress-nginx/kube-webhook-certgen'
+          - 'external-secrets'
 
 jobs:
-  my-test:
+  image-update-automation:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
       contents: write
       actions: read
       pull-requests: write
+    strategy:
+      matrix:
+        azure_environment: ["stg", "dev", "qa"]
+      max-parallel: 1
+    environment: ${{ matrix.azure_environment }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4.2.2
@@ -25,11 +47,119 @@ jobs:
           git config --global user.email github-actions@github.com
           git config --global user.name github-actions
           git pull
-          echo "hello world ${{ github.run_id }}" >> hello.txt
+
+          changes_done="false"
+          current_environment=${{ matrix.azure_environment  }}
+                    
+          json_file="image-master.json"
+          # Check if the JSON file exists
+          if [[ ! -f "$json_file" ]]; then
+              echo "File $json_file does not exist."
+              exit 1
+          fi
+
+          process_item() {
+              local item=$1
+              image_source_repository=$(echo "$item" | jq -r '.image_source_repository')
+              tag_extractor_string=$(echo "$item" | jq -r '.tag_extractor_string')
+              acr_image_name=$(echo "$item" | jq -r '.acr_image_name')
+              is_docker_image=$(echo "$item" | jq -r '.is_docker_image')
+              docker_file_path=$(echo "$item" | jq -r '.docker_file_path')
+              docker_substitution_source=$(echo "$item" | jq -r '.docker_substitution_source')
+              docker_substitution_target=$(echo "$item" | jq -r '.docker_substitution_target')
+              acr_base_image_import_source=$(echo "$item" | jq -r '.acr_base_image_import_source')
+              docker_file_folder_path=$(echo "$item" | jq -r '.docker_file_folder_path')
+              base_image_name=$(echo "$item" | jq -r '.base_image_name')
+              image_tag_prefix=$(echo "$item" | jq -r '.image_tag_prefix')
+              applicable_environments=$(echo "$item" | jq -r '.applicable_environment[]')
+              environment_match=false
+              for env in ${applicable_environments[@]}; do
+                  if [[ "$env" == "$current_environment" ]]; then
+                      environment_match=true
+                      break
+                  fi
+              done
+              if [[ "$environment_match" == "false" ]]; then
+                  echo "Skipping $acr_image_name as it is not applicable for the $current_environment environment."
+                  return
+              fi
+              
+              echo "------Processing: $acr_image_name------"
+              latest_source_tag=$(gh release list --exclude-drafts --exclude-pre-releases --limit 1 -R $image_source_repository | grep -oP "(?<=$tag_extractor_string)[0-9.]+" | head -1)
+              echo "Latest source tag: $latest_source_tag"
+              
+              current_acr_tag=2.321.0
+              echo "Current ACR tag: $current_acr_tag"
+              current_acr_tag=$(echo "$current_acr_tag" | sed -e 's/^//' -e 's/^v//')
+              echo "Current ACR tag post substitution: $current_acr_tag"
+              current_acr_tag="${current_acr_tag#v}"
+              
+              if [ ${{ inputs.force_image_build }} == 'true' ] || ( [ "$latest_source_tag" != "$current_acr_tag" ] && [ "$(printf '%s\n' "$current_acr_tag" "$latest_source_tag" | sort -V | head -n 1)" != "$latest_source_tag" ] ); then
+                  target_tag=$latest_source_tag
+                  if [ ${{ inputs.force_image_build }} == 'true' ]; then
+                    target_tag=$current_acr_tag
+                    echo "Force building image: $target_tag"
+                  else
+                    echo "latest_source_tag is greater than current_acr_tag"
+                  fi
+                  
+                  
+                  tag_exists=$(az acr repository show-tags --name ${{ vars.ACR_NAME }} --repository $base_image_name --query "contains(@, '${image_tag_prefix}${latest_source_tag}')" --output tsv)
+                  echo "Tag exists check: $tag_exists"
+                  
+                  if [ "$tag_exists" != "true" ] || [ ${{ inputs.force_image_build }} == 'true' ]; then
+                      echo 'Importing base image to acr'
+                      #az acr import --name ${{ vars.ACR_NAME }} --source $acr_base_image_import_source:$image_tag_prefix$target_tag --image $base_image_name:${image_tag_prefix}${target_tag}
+                      #az acr import --name ${{ vars.ACR_NAME }} --source $acr_base_image_import_source:$image_tag_prefix$target_tag --force --image $base_image_name:${image_tag_prefix}${target_tag}
+                  fi
+                  
+                  if [ "$is_docker_image" = "1" ]; then
+                      sed -i "s|$docker_substitution_source:.*|${{ vars.ACR_NAME }}.azurecr.us/$docker_substitution_target:${target_tag} AS base|" $docker_file_path
+                      cat $docker_file_path
+                      echo "Building image"
+                      #az acr build --registry ${{ vars.ACR_NAME }} --image $acr_image_name:${target_tag} --file $docker_file_path $docker_file_folder_path
+                  fi
+                  
+                  echo "$item" | jq -c '.manifest_update_object[]?' | while read -r change; do
+                      env=$(echo "$change" | jq -r '.env')
+                      file_path=$(echo "$change" | jq -r '.file_path')
+                      command=$(echo "$change" | jq -r '.command')
+                      if [ "$current_environment" == "$env" ]; then
+                          echo "Applying tag change for environment: $env"
+                          eval "$command"
+                          cat $file_path
+                          if [ -n "$(git status --porcelain)" ]; then
+                              git add $file_path
+                              echo "changes_done=true" >> $GITHUB_OUTPUT
+                          fi
+                      fi
+                  done
+              else
+                  echo "Latest image: $latest_source_tag is less than or equal to current ACR image: $current_acr_tag. No updates required"
+              fi
+          }
+           if [ ${{ inputs.force_image_build }} == 'true' ]; then
+              force_image_name=${{ inputs.image }}
+              item=$(jq -c --arg name "$force_image_name" '.[] | select(.acr_image_name == $name)' "$json_file")              
+              if [[ -n "$item" ]]; then
+                  process_item "$item"
+              else
+                  echo "No matching item found for force_image_name: $force_image_name"
+              fi             
+           else
+              jq -c '.[]' "$json_file" | while read -r item; do
+                  process_item "$item" || {
+                      echo "An error occurred while processing: Error: $?"
+                      continue
+                  }
+              done         
+           fi          
+
 
       - name: Commit changes
-        run: |          
-            echo "-------------------------Commiting code-----------------------------------------"            
+        run: |
+          if [ "${{ steps.process_images.outputs.changes_done }}" = "true" ]; then
+            echo "-------------------------Commiting code-----------------------------------------"
             git add .
             git commit -m "Updated manifest"
             if [ "${{ github.ref }}" = "refs/heads/main" ]; then
@@ -41,11 +171,11 @@ jobs:
               https://api.github.com/repos/${{ github.repository }}/pulls \
               -d '{
                 "title": "Update manifest from workflow run: ${{ github.run_id }}",
-                "body": "This PR is created by workflow: Image updated automation. See the [GitHub Actions run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) for more details.",
+                "body": "This PR is created by workflow: ",
                 "head": "update-manifest-${{ github.run_id }}",
                 "base": "main"
               }'              
             else
               git push
-            fi 
-          
+            fi            
+          fi
