@@ -1,0 +1,79 @@
+apiVersion: actions.github.com/v1alpha1
+kind: AutoscalingRunnerSet
+metadata:
+  name: cloud-runners
+  namespace: arc-runner
+spec:
+  template:
+    metadata:
+      labels:
+        azure.workload.identity/use: "true"
+    spec:
+      securityContext:
+        fsGroup: 1001
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: actions-ephemeral-runner
+                      operator: In
+                      values:
+                        - "True"
+                topologyKey: kubernetes.io/hostname
+      tolerations:
+        - key: CriticalAddonsOnly
+          operator: Exists
+        - effect: NoExecute
+          operator: Exists
+        - effect: NoSchedule
+          operator: Exists
+      containers:
+        - name: runner
+          command: ["/home/runner/run.sh"]
+          image: accakscntrregstg.azurecr.us/actions-runner:2.321.0
+          env:
+            - name: NODE_EXTRA_CA_CERTS
+              value: /etc/ssl/certs/ca-certificates.crt
+            - name: OPENSSL_CONF
+              value: /etc/ssl/openssl.cnf
+            - name: NODE_OPTIONS
+              value: /etc/ssl/openssl.cnf
+            - name: ACTIONS_RUNNER_CONTAINER_HOOKS
+              value: /home/runner/k8s/index.js
+            - name: ACTIONS_RUNNER_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
+              value: "false"
+            - name: ACTIONS_RUNNER_CONTAINER_HOOK_TEMPLATE
+              value: "/home/runner/config/job-podspec.yaml"
+          envFrom:
+            - secretRef:
+                name: keyvault-secrets
+          volumeMounts:
+            - name: work
+              mountPath: /home/runner/_work
+            - name: hook-extension
+              mountPath: /home/runner/config
+              readOnly: true
+      volumes:
+        - name: work
+          ephemeral:
+            volumeClaimTemplate:
+              spec:
+                accessModes:
+                  - ReadWriteOnce
+                resources:
+                  requests:
+                    storage: 16Gi
+                storageClassName: access-disk
+        - name: hook-extension
+          configMap:
+            name: hook-extension
+            items:
+              - key: content
+                path: job-podspec.yaml
