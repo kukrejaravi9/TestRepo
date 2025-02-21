@@ -33,7 +33,7 @@ spec:
       containers:
         - name: runner
           command: ["/home/runner/run.sh"]
-          image: accakscntrregstg.azurecr.us/actions-runner:2.321.0
+          image: accakscntrregstg.azurecr.us/actions-runner:2.322.0
           env:
             - name: NODE_EXTRA_CA_CERTS
               value: /etc/ssl/certs/ca-certificates.crt
