@@ -17,7 +17,7 @@
         { 
           "env": "stg", 
           "file_path": "overlays/aks-acc-stg-1/kustomization.yaml", 
-          "command": "latest_source_tag=$latest_source_tag yq eval '(.images[] | select(.name == \"ghcr.io/actions/gha-runner-scale-set-controller\") | .newTag) =  env(latest_source_tag)' -i overlays/aks-acc-stg-1/kustomization.yaml"}
+          "command": "target_tag=$target_tag yq eval '(.images[] | select(.name == \"ghcr.io/actions/gha-runner-scale-set-controller\") | .newTag) =  env(target_tag)' -i overlays/aks-acc-stg-1/kustomization.yaml"}
       ]
   },  
   {    
@@ -38,7 +38,7 @@
         {
           "env": "stg", 
           "file_path": "overlays/aks-acc-stg-1/patches/arc/arc-runner-patch.yaml", 
-          "command": "latest_source_tag=$latest_source_tag yq eval '(.spec.template.spec.containers[] | select(.image == \"accakscntrregstg.azurecr.us/actions-runner:*\") | .image) |= \"accakscntrregstg.azurecr.us/actions-runner:\" + env(latest_source_tag)' -i overlays/aks-acc-stg-1/patches/arc/arc-runner-patch.yaml"
+          "command": "target_tag=$target_tag yq eval '(.spec.template.spec.containers[] | select(.image == \"accakscntrregstg.azurecr.us/actions-runner:*\") | .image) |= \"accakscntrregstg.azurecr.us/actions-runner:\" + env(target_tag)' -i overlays/aks-acc-stg-1/patches/arc/arc-runner-patch.yaml"
         }
       ]    
   },
@@ -60,17 +60,17 @@
         {
           "env": "stg", 
           "file_path": "overlays/aks-acc-stg-1/kustomization.yaml", 
-          "command": "latest_source_tag=$latest_source_tag yq eval '(.images[] | select(.name == \"ghcr.io/gimlet-io/capacitor\") | .newTag) =  env(latest_source_tag)' -i overlays/aks-acc-stg-1/kustomization.yaml"
+          "command": "target_tag=$target_tag yq eval '(.images[] | select(.name == \"ghcr.io/gimlet-io/capacitor\") | .newTag) =  env(target_tag)' -i overlays/aks-acc-stg-1/kustomization.yaml"
         }, 
         {
           "env": "dev", 
           "file_path": "overlays/aks-acc-dev-1/kustomization.yaml", 
-          "command": "latest_source_tag=$latest_source_tag yq eval '(.images[] | select(.name == \"ghcr.io/gimlet-io/capacitor\") | .newTag) =  env(latest_source_tag)' -i overlays/aks-acc-dev-1/kustomization.yaml"
+          "command": "target_tag=$target_tag yq eval '(.images[] | select(.name == \"ghcr.io/gimlet-io/capacitor\") | .newTag) =  env(target_tag)' -i overlays/aks-acc-dev-1/kustomization.yaml"
         },
         {
           "env": "qa", 
           "file_path": "overlays/aks-acc-qa-1/kustomization.yaml", 
-          "command": "latest_source_tag=$latest_source_tag yq eval '(.images[] | select(.name == \"ghcr.io/gimlet-io/capacitor\") | .newTag) =  env(latest_source_tag)' -i overlays/aks-acc-qa-1/kustomization.yaml"
+          "command": "target_tag=$target_tag yq eval '(.images[] | select(.name == \"ghcr.io/gimlet-io/capacitor\") | .newTag) =  env(target_tag)' -i overlays/aks-acc-qa-1/kustomization.yaml"
         }
       ]
   },
@@ -92,17 +92,17 @@
         {
           "env": "stg", 
           "file_path": "overlays/aks-acc-stg-1/kustomization.yaml", 
-          "command": "latest_source_tag=$latest_source_tag yq eval '(.images[] | select(.name == \"registry.k8s.io/ingress-nginx/controller\") | .newTag) =  env(latest_source_tag)' -i overlays/aks-acc-stg-1/kustomization.yaml"
+          "command": "target_tag=$target_tag yq eval '(.images[] | select(.name == \"registry.k8s.io/ingress-nginx/controller\") | .newTag) =  env(target_tag)' -i overlays/aks-acc-stg-1/kustomization.yaml"
         }, 
         {
           "env": "dev", 
           "file_path": "overlays/aks-acc-dev-1/kustomization.yaml", 
-          "command": "latest_source_tag=$latest_source_tag yq eval '(.images[] | select(.name == \"registry.k8s.io/ingress-nginx/controller\") | .newTag) =  env(latest_source_tag)' -i overlays/aks-acc-dev-1/kustomization.yaml"
+          "command": "target_tag=$target_tag yq eval '(.images[] | select(.name == \"registry.k8s.io/ingress-nginx/controller\") | .newTag) =  env(target_tag)' -i overlays/aks-acc-dev-1/kustomization.yaml"
         },
         {
           "env": "qa", 
           "file_path": "overlays/aks-acc-qa-1/kustomization.yaml", 
-          "command": "latest_source_tag=$latest_source_tag yq eval '(.images[] | select(.name == \"registry.k8s.io/ingress-nginx/controller\") | .newTag) =  env(latest_source_tag)' -i overlays/aks-acc-qa-1/kustomization.yaml"
+          "command": "target_tag=$target_tag yq eval '(.images[] | select(.name == \"registry.k8s.io/ingress-nginx/controller\") | .newTag) =  env(target_tag)' -i overlays/aks-acc-qa-1/kustomization.yaml"
         }
       ]
   },
@@ -138,17 +138,17 @@
         {
           "env": "stg", 
           "file_path": "overlays/aks-acc-stg-1/kustomization.yaml", 
-          "command": "latest_source_tag=$latest_source_tag yq eval '(.images[] | select(.name == \"ghcr.io/external-secrets/external-secrets\") | .newTag) =  env(latest_source_tag)' -i overlays/aks-acc-stg-1/kustomization.yaml"
+          "command": "target_tag=$target_tag yq eval '(.images[] | select(.name == \"ghcr.io/external-secrets/external-secrets\") | .newTag) =  env(target_tag)' -i overlays/aks-acc-stg-1/kustomization.yaml"
         }, 
         {
           "env": "dev", 
           "file_path": "overlays/aks-acc-dev-1/kustomization.yaml", 
-          "command": "latest_source_tag=$latest_source_tag yq eval '(.images[] | select(.name == \"ghcr.io/external-secrets/external-secrets\") | .newTag) =  env(latest_source_tag)' -i overlays/aks-acc-dev-1/kustomization.yaml"
+          "command": "target_tag=$target_tag yq eval '(.images[] | select(.name == \"ghcr.io/external-secrets/external-secrets\") | .newTag) =  env(target_tag)' -i overlays/aks-acc-dev-1/kustomization.yaml"
         },
         {
           "env": "qa", 
           "file_path": "overlays/aks-acc-qa-1/kustomization.yaml", 
-          "command": "latest_source_tag=$latest_source_tag yq eval '(.images[] | select(.name == \"ghcr.io/external-secrets/external-secrets\") | .newTag) =  env(latest_source_tag)' -i overlays/aks-acc-qa-1/kustomization.yaml"
+          "command": "target_tag=$target_tag yq eval '(.images[] | select(.name == \"ghcr.io/external-secrets/external-secrets\") | .newTag) =  env(target_tag)' -i overlays/aks-acc-qa-1/kustomization.yaml"
         }
       ]
   }     
