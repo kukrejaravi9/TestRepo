@@ -50,7 +50,8 @@ jobs:
 
           changes_done="false"
           current_environment=${{ matrix.azure_environment  }}
-                    
+          MY_ACR_NAME='accakscntrregstg'
+          
           json_file="image-master.json"
           # Check if the JSON file exists
           if [[ ! -f "$json_file" ]]; then
@@ -114,7 +115,7 @@ jobs:
                   fi
                   
                   if [ "$is_docker_image" = "1" ]; then
-                      sed -i "s|$docker_substitution_source:.*|${{ vars.ACR_NAME }}.azurecr.us/$docker_substitution_target:${target_tag} AS base|" $docker_file_path
+                      sed -i "s|$docker_substitution_source:.*|${MY_ACR_NAME}.azurecr.us/$docker_substitution_target:${target_tag} AS base|" $docker_file_path
                       cat $docker_file_path
                       echo "Building image"
                       #az acr build --registry ${{ vars.ACR_NAME }} --image $acr_image_name:${target_tag} --file $docker_file_path $docker_file_folder_path
